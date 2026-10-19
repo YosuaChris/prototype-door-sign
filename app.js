@@ -701,7 +701,7 @@ function renderTwoBedSideBySide(bed, index) {
       <div class="flex-1 flex flex-col justify-start gap-1.5 min-h-0">
         <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
           <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-          <span>Indikator Keselamatan Pasien (JCI/KARS)</span>
+          <span>Indikator Keselamatan Pasien</span>
         </div>
         <div class="flex flex-col gap-1.5">
           ${badgesHtml}
@@ -1073,16 +1073,13 @@ function renderVipRoom(bed, index) {
     <!-- RIGHT PANEL: Patient Safety Precautions (Top) & Clinical Care Timeline (Bottom / Last) (col-span-6) -->
     <div onclick="editSpecificBed(${index})" class="col-span-6 flex flex-col justify-between gap-2.5 sm:gap-3 h-full overflow-hidden cursor-pointer group">
       
-      <!-- PATIENT SAFETY PRECAUTIONS (JCI / KARS) - Positioned at Top -->
+      <!-- PATIENT SAFETY PRECAUTIONS - Positioned at Top -->
       <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
           <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-            <span>Indikator Keselamatan Pasien (Patient Safety)</span>
+            <span>Indikator Keselamatan Pasien</span>
           </div>
-          <span class="text-[10px] font-black text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-300 dark:border-amber-800">
-            Standard JCI / KARS
-          </span>
         </div>
 
         <!-- Safety Badges Stack -->

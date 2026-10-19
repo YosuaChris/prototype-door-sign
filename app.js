@@ -129,27 +129,27 @@ let state = {
 // Standardized Clinical Vector Icons
 const ICONS = {
   bed: `
-    <svg class="w-8 h-8 sm:w-9 sm:h-9 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 19h20M2 17v2M22 17v2" />
       <path d="M2 8v9h20V12a3 3 0 0 0-3-3h-9" />
       <path d="M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
     </svg>
   `,
   fallRisk: `
-    <svg class="w-5 h-5 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
       <line x1="12" y1="9" x2="12" y2="13"></line>
       <line x1="12" y1="17" x2="12.01" y2="17"></line>
     </svg>
   `,
   npo: `
-    <svg class="w-5 h-5 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   `,
   allergy: `
-    <svg class="w-5 h-5 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="12" y1="8" x2="12" y2="12"></line>
       <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -157,12 +157,12 @@ const ICONS = {
     </svg>
   `,
   moon: `
-    <svg class="w-4 h-4 text-[#7c3aed] dark:text-[#c4b5fd] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#7c3aed] dark:text-[#c4b5fd] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
     </svg>
   `,
   users: `
-    <svg class="w-4 h-4 text-[#059669] dark:text-[#6ee7b7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#059669] dark:text-[#6ee7b7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
       <circle cx="9" cy="7" r="4"></circle>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -170,19 +170,19 @@ const ICONS = {
     </svg>
   `,
   family: `
-    <svg class="w-4 h-4 text-[#0284c7] dark:text-[#7dd3fc] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#0284c7] dark:text-[#7dd3fc] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
     </svg>
   `,
   procedure: `
-    <svg class="w-4 h-4 text-[#d97706] dark:text-[#fcd34d] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-[#d97706] dark:text-[#fcd34d] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"></path>
       <path d="M9 12.5V17a3 3 0 0 0 6 0v-2.5"></path>
       <circle cx="15" cy="14.5" r="2.5"></circle>
     </svg>
   `,
   getCalendarIcon: (colorClass) => `
-    <svg class="w-5 h-5 sm:w-6 sm:h-6 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -193,7 +193,7 @@ const ICONS = {
     </svg>
   `,
   getCheckIcon: (colorClass) => `
-    <svg class="w-5 h-5 sm:w-6 sm:h-6 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
       <polyline points="22 4 12 14.01 9 11.01"></polyline>
     </svg>
@@ -346,11 +346,11 @@ function renderSignage() {
       }
 
       return `
-        <div class="flex items-center gap-2 px-2.5 py-1 rounded-lg ${bgClass} transition-all duration-200 shadow-2xs flex-1 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs flex-1 min-w-0">
           <div class="flex-shrink-0">${icon}</div>
           <div class="leading-none min-w-0 truncate">
-            <h4 class="font-extrabold text-[12px] sm:text-[13px] tracking-tight ${titleClass} truncate">${b.title}</h4>
-            <p class="text-[9px] sm:text-[10px] font-semibold ${subClass} mt-0.5 truncate">${b.subtitle}</p>
+            <h4 class="font-extrabold text-xs sm:text-sm md:text-[14.5px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+            <p class="text-[10px] sm:text-[11px] font-semibold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
           </div>
         </div>
       `;
@@ -362,61 +362,61 @@ function renderSignage() {
 
     return `
       <!-- BED CARD ROW: ${bed.label} (Fixed 33.3% height) -->
-      <div onclick="editSpecificBed(${index})" class="bed-card-fixed-row cursor-pointer bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 rounded-xl px-3 py-1.5 sm:py-2 gap-3 shadow-2xs relative group">
+      <div onclick="editSpecificBed(${index})" class="bed-card-fixed-row cursor-pointer bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 rounded-xl sm:rounded-2xl px-3.5 sm:px-5 py-2 sm:py-2.5 gap-3 sm:gap-4 md:gap-5 shadow-2xs relative group">
         
         <!-- LEFT: Bed ID + Care Team -->
-        <div class="flex items-center gap-3 sm:gap-4 min-w-[240px] sm:min-w-[260px] flex-shrink-0">
+        <div class="flex items-center gap-3.5 sm:gap-4 md:gap-5 min-w-[250px] sm:min-w-[280px] md:min-w-[310px] flex-shrink-0">
           
           <!-- Bed Icon Box -->
-          <div class="w-16 h-16 sm:w-18 sm:h-18 rounded-xl bg-[#f0f7ff] dark:bg-sky-950/60 border border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-0.5 flex-shrink-0 shadow-2xs">
+          <div class="w-20 h-20 sm:w-22 sm:h-22 md:w-24 md:h-24 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border-2 border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1 flex-shrink-0 shadow-2xs">
             ${ICONS.bed}
-            <span class="font-extrabold text-[#0369a1] dark:text-[#38bdf8] text-xs sm:text-sm tracking-wider leading-none">${bed.label}</span>
+            <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-xs sm:text-sm md:text-base tracking-wider leading-none">${bed.label}</span>
           </div>
 
           <!-- Care Team Details -->
-          <div class="space-y-1">
+          <div class="space-y-1 sm:space-y-1.5 min-w-0">
             <div>
-              <p class="text-[9px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Attending physician</p>
-              <h3 class="text-xs sm:text-sm font-bold text-[#0f172a] dark:text-white leading-tight truncate">${displayPhysician}</h3>
+              <p class="text-[10px] sm:text-[11px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Attending physician</p>
+              <h3 class="text-xs sm:text-sm md:text-base font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-0.5">${displayPhysician}</h3>
             </div>
             <div>
-              <p class="text-[9px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Resident Medical Officer</p>
-              <h3 class="text-xs sm:text-sm font-bold text-[#0f172a] dark:text-white leading-tight truncate">${displayRMO}</h3>
+              <p class="text-[10px] sm:text-[11px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Resident Medical Officer</p>
+              <h3 class="text-xs sm:text-sm md:text-base font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-0.5">${displayRMO}</h3>
             </div>
             <div>
-              <p class="text-[9px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Nurse</p>
-              <h3 class="text-xs sm:text-sm font-bold text-[#0f172a] dark:text-white leading-tight truncate">${displayNurse}</h3>
+              <p class="text-[10px] sm:text-[11px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Nurse</p>
+              <h3 class="text-xs sm:text-sm md:text-base font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-0.5">${displayNurse}</h3>
             </div>
           </div>
 
         </div>
 
         <!-- DIVIDER -->
-        <div class="hidden md:block w-[1px] h-14 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
+        <div class="hidden md:block w-[1.5px] h-16 sm:h-20 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
 
         <!-- MIDDLE: Next Care Event + Visiting Status (Stacked Vertically) -->
-        <div class="flex-1 max-w-xs sm:max-w-sm flex flex-col justify-center gap-1 min-w-0">
+        <div class="flex-1 min-w-[270px] sm:min-w-[310px] flex flex-col justify-center gap-1.5 sm:gap-2 min-w-0">
           
           <!-- Next Care Event Box -->
-          <div class="border ${theme.boxClass} rounded-lg px-2.5 py-1 transition-all duration-300 relative">
-            <h3 class="font-extrabold text-[11px] sm:text-xs ${theme.titleClass} tracking-tight mb-0.5 flex items-center gap-1 leading-none">
+          <div class="border ${theme.boxClass} rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 transition-all duration-300 relative shadow-2xs">
+            <h3 class="font-extrabold text-xs sm:text-[13px] ${theme.titleClass} tracking-tight mb-1 flex items-center gap-1.5 leading-none">
               <span>${event.title || 'Next Care Event'}</span>
-              ${theme.pulseDot ? '<span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-ping"></span>' : ''}
+              ${theme.pulseDot ? '<span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>' : ''}
             </h3>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2.5">
               ${eventIcon}
 
               <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-1.5">
-                  <span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] font-bold border ${theme.badgeClass}">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-extrabold border ${theme.badgeClass}">
                     ${event.status}
                   </span>
-                  <span class="font-bold text-[11px] sm:text-xs ${theme.textClass} truncate">
+                  <span class="font-extrabold text-xs sm:text-sm md:text-[14.5px] ${theme.textClass} truncate">
                     ${event.name} • ${event.time}
                   </span>
                 </div>
-                <p class="text-[9px] ${theme.noteClass} font-medium mt-0.5 truncate">
+                <p class="text-[11px] sm:text-xs ${theme.noteClass} font-semibold mt-0.5 truncate">
                   ${event.note || 'Observation recorded'}
                 </p>
               </div>
@@ -425,15 +425,15 @@ function renderSignage() {
 
           <!-- Visiting Status Strip (Directly below Next Care Event) -->
           ${visiting ? `
-            <div class="flex items-center justify-between px-2.5 py-1 rounded-lg ${visiting.stripClass} border transition-all shadow-2xs">
-              <div class="flex items-center gap-1.5 min-w-0">
+            <div class="flex items-center justify-between px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl ${visiting.stripClass} border transition-all shadow-2xs">
+              <div class="flex items-center gap-2 min-w-0">
                 <div class="flex-shrink-0">${visiting.icon}</div>
-                <div class="flex items-center gap-1 min-w-0 truncate">
-                  <span class="font-extrabold text-[11px] ${visiting.titleClass} truncate">${visiting.title}</span>
-                  <span class="text-[9px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
+                <div class="flex items-center gap-1.5 min-w-0 truncate">
+                  <span class="font-extrabold text-xs sm:text-[13px] ${visiting.titleClass} truncate">${visiting.title}</span>
+                  <span class="text-[10px] sm:text-[11px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
                 </div>
               </div>
-              <span class="flex-shrink-0 text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.2 rounded-full border ${visiting.badgeClass}">
+              <span class="flex-shrink-0 text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${visiting.badgeClass}">
                 Visiting
               </span>
             </div>
@@ -442,7 +442,7 @@ function renderSignage() {
         </div>
 
         <!-- RIGHT: Clinical Safety Alerts Only (Stack of 2-3 pills, fixed height) -->
-        <div class="w-44 sm:w-52 flex flex-col gap-1 justify-center flex-shrink-0">
+        <div class="w-48 sm:w-56 md:w-64 flex flex-col gap-1.5 sm:gap-2 justify-center flex-shrink-0">
           ${badgesHtml}
         </div>
 

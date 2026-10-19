@@ -1,4 +1,4 @@
-/* Modern Hospital Door Sign Custom Stylesheet - Fixed 10.1" Device Frame */
+/* Modern Hospital Door Sign Custom Stylesheet - Fixed 10.1" Display (Maximized Components) */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
@@ -20,7 +20,7 @@ body {
     box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.28);
   }
   50% {
-    box-shadow: 0 0 0 5px rgba(225, 29, 72, 0);
+    box-shadow: 0 0 0 6px rgba(225, 29, 72, 0);
   }
 }
 
@@ -29,14 +29,14 @@ body {
 }
 
 /* =========================================================================
-   STRICT FIXED 10.1" DEVICE FRAME LOCKS (16:10 Standard Aspect Ratio)
+   STRICT FIXED 10.1" DEVICE FRAME LOCKS (Maximized Internal Components)
    ========================================================================= */
 
-/* The tablet chassis maintains exact 16:10 aspect ratio and never stretches arbitrarily */
+/* The tablet chassis maintains exact 16:10.5 aspect ratio and fills presentation stage comfortably */
 .tablet-chassis-fixed {
   width: 100%;
-  max-width: 1040px;
-  aspect-ratio: 16 / 10.8;
+  max-width: 1140px;
+  aspect-ratio: 16 / 10.4;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@ body {
   box-sizing: border-box;
 }
 
-/* 3 Equal-Height Bed Rows (Exactly 33.33% each, no card can expand the screen) */
+/* 3 Equal-Height Bed Rows (Maximized space utilization, zero overflow) */
 .bed-card-fixed-row {
   height: 100% !important;
   min-height: 0 !important;
@@ -65,11 +65,12 @@ body {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .bed-card-fixed-row:hover {
   border-color: #38bdf8;
+  box-shadow: 0 4px 15px -2px rgba(2, 132, 199, 0.1);
 }
 
 /* Tablet Frame Bezel Themes */

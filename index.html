@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospital Smart Door Sign - 10" Device Showcase</title>
+  <title>Hospital Smart Door Sign - 10.1" Fixed Display Frame</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Inter & Plus Jakarta Sans Font -->
@@ -36,10 +36,10 @@
     }
   </script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white antialiased transition-colors duration-300">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white antialiased">
 
   <!-- PRESENTATION TOP TOOLBAR -->
-  <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-40">
+  <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-40">
     <div class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold shadow-md shadow-sky-500/20">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -48,10 +48,13 @@
       </div>
       <div>
         <h1 class="text-sm font-bold text-white flex items-center gap-2">
-          <span>Smart Door Sign Prototype</span>
-          <span class="text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-400/30 px-2 py-0.5 rounded-full uppercase tracking-wider">Mockup 10.1" PoE Tablet</span>
+          <span>Smart Door Sign Display</span>
+          <span class="text-[10px] font-extrabold bg-sky-500/20 text-sky-300 border border-sky-400/40 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+            Fixed 10.1" (16:10 Ratio)
+          </span>
         </h1>
-        <p class="text-[11px] text-slate-400">Mode Presentasi Wall-Mounted Display (KARS / JCI Compliant)</p>
+        <p class="text-[11px] text-slate-400">Rasio Layar Terkunci Permanen (Resolusi Standar 1280 × 800)</p>
       </div>
     </div>
 
@@ -60,21 +63,21 @@
       <!-- Edit Data Button -->
       <button onclick="openEditorModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 font-bold rounded-xl bg-sky-600 text-white hover:bg-sky-500 transition shadow-sm">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
-        <span>Kelola Data & Status Besuk</span>
+        <span>Kelola Data Bed</span>
       </button>
 
       <!-- Frame Bezel Color Selector -->
       <div class="hidden sm:flex items-center gap-1 bg-slate-800/90 border border-slate-700 p-1 rounded-xl">
         <span class="text-[10px] text-slate-400 px-2 font-medium">Bezel:</span>
-        <button onclick="setBezelColor('black')" id="bezelBtnBlack" class="w-5 h-5 rounded-full bg-slate-900 border-2 border-sky-400 shadow-xs" title="Matte Obsidian Black"></button>
-        <button onclick="setBezelColor('white')" id="bezelBtnWhite" class="w-5 h-5 rounded-full bg-white border border-slate-400 shadow-xs" title="Medical Clean White"></button>
-        <button onclick="setBezelColor('silver')" id="bezelBtnSilver" class="w-5 h-5 rounded-full bg-slate-300 border border-slate-400 shadow-xs" title="Brushed Aluminum Silver"></button>
+        <button onclick="setBezelColor('black')" id="bezelBtnBlack" class="w-4.5 h-4.5 rounded-full bg-slate-900 border-2 border-sky-400 shadow-xs" title="Matte Obsidian Black"></button>
+        <button onclick="setBezelColor('white')" id="bezelBtnWhite" class="w-4.5 h-4.5 rounded-full bg-white border border-slate-400 shadow-xs" title="Medical Clean White"></button>
+        <button onclick="setBezelColor('silver')" id="bezelBtnSilver" class="w-4.5 h-4.5 rounded-full bg-slate-300 border border-slate-400 shadow-xs" title="Brushed Aluminum Silver"></button>
       </div>
 
       <!-- Side Status LED Bar Toggle -->
       <button onclick="cycleLedStatus()" id="ledToggleBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition" title="Ganti status lampu LED samping tablet">
         <span id="ledStatusDot" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-sm shadow-red-500/50"></span>
-        <span id="ledStatusLabel">LED: Overdue Alert</span>
+        <span id="ledStatusLabel">LED: Alert</span>
       </button>
 
       <!-- Toggle Night Mode di dalam Layar -->
@@ -89,80 +92,75 @@
     </div>
   </header>
 
-  <!-- PRESENTATION STAGE / WALL CANVAS -->
-  <main class="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 overflow-y-auto">
+  <!-- PRESENTATION WALL CANVAS (Centered Device Stage) -->
+  <main class="flex-1 flex flex-col items-center justify-center p-3 sm:p-5 md:p-6 overflow-hidden">
 
-    <!-- 10.1 INCH PHYSICAL DEVICE MOCKUP CONTAINER -->
-    <div class="relative w-full max-w-[1140px] my-auto transition-all duration-300">
+    <!-- STRICT 10.1" PHYSICAL TABLET CHASSIS (Fixed 16:10 Aspect Ratio, Zero Resizing) -->
+    <div class="relative w-full max-w-[1040px] flex items-center justify-center">
       
       <!-- WALL SHADOW & AMBIENT GLOW -->
-      <div id="deviceAmbientGlow" class="absolute -inset-3 bg-red-500/10 rounded-[44px] filter blur-xl opacity-70 transition-all duration-500"></div>
+      <div id="deviceAmbientGlow" class="absolute -inset-2 bg-red-500/10 rounded-[44px] filter blur-xl opacity-70 transition-all duration-500 pointer-events-none"></div>
 
-      <!-- PHYSICAL TABLET CHASSIS (Bezel Body) -->
-      <div id="tabletChassis" class="relative bg-[#111827] border-4 border-[#1f2937] rounded-[36px] sm:rounded-[42px] p-4 sm:p-6 md:p-7 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] transition-all duration-300">
+      <!-- PHYSICAL TABLET FRAME (LOCKED TO 16:10 RATIO) -->
+      <div id="tabletChassis" class="tablet-chassis-fixed bg-[#111827] border-4 border-[#1f2937] rounded-[34px] sm:rounded-[38px] p-3.5 sm:p-4.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)]">
         
         <!-- SIDE HARDWARE LED LIGHT BAR -->
-        <div id="tabletLedBar" class="absolute left-0 top-1/4 bottom-1/4 w-1.5 bg-red-500 rounded-r-md shadow-[0_0_15px_rgba(239,68,68,0.9)] animate-pulse transition-all duration-300" title="Side Status Light Bar"></div>
+        <div id="tabletLedBar" class="absolute left-0 top-1/4 bottom-1/4 w-1.5 bg-red-500 rounded-r-md shadow-[0_0_15px_rgba(239,68,68,0.9)] animate-pulse transition-all duration-300" title="PoE Side Status Light Bar"></div>
 
         <!-- FRONT HARDWARE SENSOR & CAMERA PINHOLE -->
-        <div class="absolute top-2.5 sm:top-3.5 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-60">
-          <div class="w-1.5 h-1.5 rounded-full bg-black border border-slate-700" title="Ambient Light Sensor"></div>
-          <div class="w-2 h-2 rounded-full bg-slate-900 border border-slate-700" title="Camera / Proximity Sensor"></div>
+        <div class="absolute top-2 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-50">
+          <div class="w-1.5 h-1.5 rounded-full bg-black border border-slate-700" title="Ambient Sensor"></div>
+          <div class="w-2 h-2 rounded-full bg-slate-900 border border-slate-700" title="Front Camera"></div>
         </div>
 
-        <!-- 10" ACTIVE SCREEN GLASS -->
-        <div id="screenViewport" class="relative w-full bg-slate-100 text-slate-800 rounded-2xl md:rounded-[22px] overflow-hidden border border-slate-300/80 shadow-inner flex flex-col transition-colors duration-300 select-none">
+        <!-- 10.1" ACTIVE SCREEN DISPLAY (Strict 16:10 Screen Ratio, Locked Viewport) -->
+        <div id="screenViewport" class="screen-fixed-viewport bg-slate-100 text-slate-800 rounded-xl md:rounded-[18px] border border-slate-300 shadow-inner select-none relative">
           
-          <!-- SLIM SCREEN HEADER INSIDE 10" TABLET (With Visiting Policy) -->
-          <div class="flex-shrink-0 flex items-center justify-between bg-white dark:bg-slate-900 px-4 py-2 border-b border-slate-200/90 dark:border-slate-800">
-            <div class="flex items-center gap-3">
-              <div class="bg-sky-600 text-white px-3 py-1 rounded-lg font-extrabold text-xs sm:text-sm tracking-wider flex items-center gap-1.5 shadow-2xs">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <!-- SLIM SCREEN HEADER (Fixed Height: ~38px) -->
+          <div class="h-9 sm:h-10 flex-shrink-0 flex items-center justify-between bg-white dark:bg-slate-900 px-3.5 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <div class="bg-sky-600 text-white px-2.5 py-0.5 rounded-md font-extrabold text-[11px] sm:text-xs tracking-wider flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.75a.75.75 0 00-.75-.75h-10.5a.75.75 0 00-.75.75V21h4.5z"/>
                 </svg>
                 <span id="roomNumber">ROOM 308</span>
               </div>
-              <div>
-                <span id="wardName" class="font-bold text-slate-800 dark:text-slate-100 text-xs sm:text-sm">BANGSAL DAHLIA (RAWAT INAP KELAS I)</span>
-                <span class="hidden sm:inline text-[11px] text-slate-500 dark:text-slate-400 font-medium ml-2">| Jam Besuk: 10:00 - 12:00 & 17:00 - 20:00</span>
-              </div>
+              <span id="wardName" class="font-bold text-slate-800 dark:text-slate-100 text-[11px] sm:text-xs truncate">BANGSAL DAHLIA (RAWAT INAP KELAS I)</span>
+              <span class="hidden md:inline text-[10px] text-slate-400 font-medium">| Jam Besuk: 10:00 - 12:00</span>
             </div>
 
             <!-- Live Clock & Date -->
-            <div class="flex items-center gap-3">
-              <div class="hidden sm:block text-right">
-                <div id="currentDate" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Senin, 19 Okt 2026</div>
-                <div class="text-[9px] text-slate-400 dark:text-slate-500">St. Elisabeth Med. Ctr.</div>
-              </div>
-              <div id="currentTime" class="text-sm sm:text-base font-extrabold tracking-tight text-sky-900 dark:text-sky-300 font-mono bg-sky-50 dark:bg-sky-950/60 px-2.5 py-0.5 rounded-lg border border-sky-100 dark:border-sky-900">
+            <div class="flex items-center gap-2.5 flex-shrink-0">
+              <div id="currentDate" class="hidden sm:block text-[9px] font-bold text-slate-400 uppercase tracking-wide">Senin, 19 Okt 2026</div>
+              <div id="currentTime" class="text-xs sm:text-sm font-extrabold tracking-tight text-sky-900 dark:text-sky-300 font-mono bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded-md border border-sky-100 dark:border-sky-900">
                 14:35:10
               </div>
             </div>
           </div>
 
-          <!-- THE 3 BED CARDS (Matches reference screenshot with precision) -->
-          <div class="p-3 sm:p-3.5 flex-1 flex flex-col justify-between">
-            <div id="signageBoard" class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-2.5 sm:p-3 shadow-xs">
+          <!-- THE 3 BED CARDS (STRICT 3-ROW GRID, EXACTLY 33.3% HEIGHT EACH) -->
+          <div class="flex-1 min-h-0 p-2 sm:p-2.5 flex flex-col overflow-hidden">
+            <div id="signageBoard" class="flex-1 min-h-0 bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-xl p-2 sm:p-2.5 shadow-2xs flex flex-col overflow-hidden">
               
-              <!-- 3 Stacked Bed Cards Container -->
-              <div id="bedCardsContainer" class="flex flex-col gap-2.5 sm:gap-3">
-                <!-- Dynamically populated via app.js -->
+              <!-- EXACT 3 EQUAL ROWS - CANNOT STRETCH OR EXPAND THE FRAME -->
+              <div id="bedCardsContainer" class="flex-1 min-h-0 grid grid-rows-3 gap-2 overflow-hidden">
+                <!-- Populated via app.js -->
               </div>
 
             </div>
           </div>
 
-          <!-- SUBTLE GLASS REFLECTION ACCENT -->
-          <div class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-white/[0.08]"></div>
+          <!-- Subtle Glass Glare Accent -->
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-white/[0.05]"></div>
 
         </div>
 
-        <!-- TABLET BOTTOM EMBOSSED BRANDING -->
-        <div class="mt-2 sm:mt-2.5 flex items-center justify-between px-2 text-[10px] text-slate-400 dark:text-slate-500 tracking-wider font-mono">
-          <span>HOSPITAL SIGNAGE DISPLAY 10.1" POE</span>
-          <span class="flex items-center gap-1.5 text-emerald-400">
+        <!-- TABLET BOTTOM STATUS BAR -->
+        <div class="mt-1.5 flex items-center justify-between px-2 text-[9px] text-slate-400 font-mono">
+          <span>HARDWARE: 10.1" POE SMART SIGNAGE (16:10 FIXED)</span>
+          <span class="flex items-center gap-1 text-emerald-400">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            <span>SYSTEM ACTIVE</span>
+            <span>SYSTEM LOCKED</span>
           </span>
         </div>
 
@@ -171,13 +169,13 @@
     </div>
 
     <!-- PRESENTATION CAPTION -->
-    <div class="text-center mt-5 text-xs text-slate-400">
-      <p>💡 <strong class="text-slate-200">Tips Presentasi:</strong> Klik salah satu kartu bed untuk mengubah dokter, perawat, tindakan medis, maupun <strong>Status Kunjungan (Do Not Disturb / Visiting Allowed)</strong>.</p>
+    <div class="text-center mt-3 text-[11px] text-slate-400">
+      <p>🔒 <strong>Rasio 16:10 Terkunci:</strong> Ukuran frame dan proporsi 3 kartu bed bersifat <em>fixed</em> permanen merepresentasikan layar tablet 10.1 inci fisik (1280×800).</p>
     </div>
 
   </main>
 
-  <!-- MODAL / DRAWER: EDIT DATA BED & VISITING STATUS -->
+  <!-- MODAL / DRAWER: EDIT DATA BED -->
   <div id="editorModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
     <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-200" id="modalCard">
       
@@ -197,7 +195,7 @@
         </button>
       </div>
 
-      <!-- Modal Body (Scrollable Form) -->
+      <!-- Modal Body -->
       <div class="p-5 overflow-y-auto space-y-4 flex-1 text-xs">
         
         <!-- Bed Selector Tabs -->
@@ -210,16 +208,16 @@
 
         <form id="bedEditForm" onsubmit="saveBedChanges(event)" class="space-y-4">
           
-          <!-- VISITING STATUS SECTION (New Feature) -->
+          <!-- Visiting Status -->
           <div class="p-3.5 rounded-2xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800">
-            <h3 class="text-[11px] font-bold text-purple-900 dark:text-purple-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <span>Status Kunjungan / Besuk (Visiting Status)</span>
+            <h3 class="text-[11px] font-bold text-purple-900 dark:text-purple-300 uppercase tracking-wider mb-2">
+              Status Kunjungan / Besuk (Visiting Status)
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
-                <label class="block text-[10px] font-semibold text-purple-800 dark:text-purple-300 mb-0.5">Kategori Kunjungan</label>
+                <label class="block text-[10px] font-semibold text-purple-800 dark:text-purple-300 mb-0.5">Kategori</label>
                 <select id="inputVisitingStatus" class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-purple-300 dark:border-purple-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
-                  <option value="dnd">🌙 Do Not Disturb (Jangan Diganggu / Istirahat)</option>
+                  <option value="dnd">🌙 Do Not Disturb (Jangan Diganggu)</option>
                   <option value="allowed">👥 Visiting Allowed (Kunjungan Diperbolehkan)</option>
                   <option value="family_only">👨‍👩‍👧 Family Only (Khusus Keluarga Inti)</option>
                   <option value="procedure">🩺 Procedure in Progress (Sedang Tindakan)</option>

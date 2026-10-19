@@ -1,72 +1,26 @@
-/* Modern Hospital Door Sign Custom Stylesheet - Clinical Best Practice Palette */
+/* Modern Hospital Door Sign Custom Stylesheet - Fixed 10.1" Device Frame */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* =========================================================================
-     CLINICAL COLOR SYSTEM (JCI / KARS Patient Safety & WCAG AAA Compliant)
-     ========================================================================= */
-  
-  /* Primary Clinical Identity (Medical Trust & Cleanliness) */
-  --clinical-blue-primary: #0284c7;       /* Sky-600 */
-  --clinical-blue-dark: #0369a1;          /* Sky-700 */
-  --clinical-blue-tint: #f0f7ff;          /* Sky-50/Tint */
-  --clinical-blue-border: #bae6fd;        /* Sky-200 */
-  
-  /* Typography - Maximum Contrast & Legibility */
-  --text-heading: #0f172a;                /* Slate-900: Ratio 14.5:1 on white */
-  --text-subhead: #334155;                /* Slate-700: Ratio 8.5:1 on white */
-  --text-muted: #475569;                  /* Slate-600: Ratio 5.7:1 (Passes WCAG AAA) */
-  
-  /* Clinical Safety Alerts - Universal Healthcare Coding */
-  /* 1. Fall Risk (Yellow / Amber - Standard AHA/KARS Wristband) */
-  --fall-bg: #fffbeb;                     /* Amber-50 */
-  --fall-border: #fcd34d;                 /* Amber-300 */
-  --fall-title: #78350f;                  /* Amber-900 */
-  --fall-text: #92400e;                   /* Amber-800 */
-  --fall-icon: #b45309;                   /* Amber-700 */
-  
-  /* 2. Allergy (Red - Universal Medical Allergy Standard) */
-  --allergy-bg: #fef2f2;                  /* Red-50 */
-  --allergy-border: #fca5a5;              /* Red-300 */
-  --allergy-title: #7f1d1d;               /* Red-900 */
-  --allergy-text: #991b1b;                /* Red-800 */
-  --allergy-icon: #dc2626;                /* Red-600 */
-  
-  /* 3. NPO (Nil Per Os - Diet Restriction / Puasa) */
-  --npo-bg: #fff7ed;                      /* Orange-50 */
-  --npo-border: #fdba74;                  /* Orange-300 */
-  --npo-title: #7c2d12;                   /* Orange-900 */
-  --npo-text: #9a3412;                    /* Orange-800 */
-  --npo-icon: #ea580c;                    /* Orange-600 */
-
-  /* 4. Visiting Status: Do Not Disturb (Resting / Quiet Hours) */
-  --dnd-bg: #f5f3ff;                      /* Purple-50 */
-  --dnd-border: #ddd6fe;                  /* Purple-200 */
-  --dnd-title: #4c1d95;                   /* Purple-900 */
-  --dnd-text: #6d28d9;                    /* Purple-700 */
-  --dnd-icon: #7c3aed;                    /* Purple-600 */
-  
-  /* 5. Next Care Event - Overdue Alert (Clinical Crimson) */
-  --overdue-bg: #fff5f5;                  /* Rose/Red-50 */
-  --overdue-border: #fda4af;              /* Rose-300 */
-  --overdue-title: #be123c;               /* Rose-700 */
-  --overdue-text: #9f1239;                /* Rose-800 */
+  --clinical-blue-primary: #0284c7;
+  --clinical-blue-dark: #0369a1;
+  --clinical-blue-tint: #f0f7ff;
+  --clinical-blue-border: #bae6fd;
 }
 
-/* Base Body Styles */
 body {
   font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtle Overdue Pulse Animation (Non-fatiguing medical alert) */
+/* Subtle Overdue Pulse Animation */
 @keyframes softPulse {
   0%, 100% {
     box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.28);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(225, 29, 72, 0);
+    box-shadow: 0 0 0 5px rgba(225, 29, 72, 0);
   }
 }
 
@@ -74,14 +28,48 @@ body {
   animation: softPulse 2.8s infinite ease-in-out;
 }
 
-/* Bed card item hover transitions */
-.bed-card-item {
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, border-color 0.15s ease;
+/* =========================================================================
+   STRICT FIXED 10.1" DEVICE FRAME LOCKS (16:10 Standard Aspect Ratio)
+   ========================================================================= */
+
+/* The tablet chassis maintains exact 16:10 aspect ratio and never stretches arbitrarily */
+.tablet-chassis-fixed {
+  width: 100%;
+  max-width: 1040px;
+  aspect-ratio: 16 / 10.8;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
-.bed-card-item:hover {
+/* The screen inside is locked strictly to 16:10 (Native 10.1" 1280x800 ratio) */
+.screen-fixed-viewport {
+  width: 100%;
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 3 Equal-Height Bed Rows (Exactly 33.33% each, no card can expand the screen) */
+.bed-card-fixed-row {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.bed-card-fixed-row:hover {
   border-color: #38bdf8;
-  box-shadow: 0 8px 24px -4px rgba(2, 132, 199, 0.12);
 }
 
 /* Tablet Frame Bezel Themes */
@@ -103,18 +91,13 @@ body {
   box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 3px rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Smooth modal scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Hide scrollbars inside fixed screen */
+.screen-fixed-viewport ::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+  height: 0px;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #475569;
+.screen-fixed-viewport * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }

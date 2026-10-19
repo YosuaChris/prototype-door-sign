@@ -1,5 +1,5 @@
 /**
- * Hospital Smart Door Sign Application - Clinical Event & Visiting Status System
+ * Hospital Smart Door Sign Application - Fixed 10.1" (16:10) Display Frame
  * Standardized to JCI / KARS Patient Safety & WCAG AAA Contrast
  */
 
@@ -129,64 +129,60 @@ let state = {
 // Standardized Clinical Vector Icons
 const ICONS = {
   bed: `
-    <svg class="w-10 h-10 sm:w-11 sm:h-11 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-8 h-8 sm:w-9 sm:h-9 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 19h20M2 17v2M22 17v2" />
       <path d="M2 8v9h20V12a3 3 0 0 0-3-3h-9" />
       <path d="M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
     </svg>
   `,
   fallRisk: `
-    <svg class="w-6 h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
       <line x1="12" y1="9" x2="12" y2="13"></line>
       <line x1="12" y1="17" x2="12.01" y2="17"></line>
     </svg>
   `,
   npo: `
-    <svg class="w-6 h-6 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   `,
   allergy: `
-    <svg class="w-6 h-6 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="12" y1="8" x2="12" y2="12"></line>
       <line x1="12" y1="16" x2="12.01" y2="16"></line>
       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   `,
-  // Moon Icon for Do Not Disturb
   moon: `
-    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#7c3aed] dark:text-[#c4b5fd] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4 h-4 text-[#7c3aed] dark:text-[#c4b5fd] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
     </svg>
   `,
-  // Users Icon for Visiting Allowed
   users: `
-    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#059669] dark:text-[#6ee7b7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4 h-4 text-[#059669] dark:text-[#6ee7b7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
       <circle cx="9" cy="7" r="4"></circle>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
     </svg>
   `,
-  // Heart Icon for Family Only
   family: `
-    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#0284c7] dark:text-[#7dd3fc] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4 h-4 text-[#0284c7] dark:text-[#7dd3fc] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
     </svg>
   `,
-  // Stethoscope Icon for Procedure in progress
   procedure: `
-    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#d97706] dark:text-[#fcd34d] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-4 h-4 text-[#d97706] dark:text-[#fcd34d] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"></path>
       <path d="M9 12.5V17a3 3 0 0 0 6 0v-2.5"></path>
       <circle cx="15" cy="14.5" r="2.5"></circle>
     </svg>
   `,
   getCalendarIcon: (colorClass) => `
-    <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 sm:w-6 sm:h-6 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -197,7 +193,7 @@ const ICONS = {
     </svg>
   `,
   getCheckIcon: (colorClass) => `
-    <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 sm:w-6 sm:h-6 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
       <polyline points="22 4 12 14.01 9 11.01"></polyline>
     </svg>
@@ -262,7 +258,7 @@ function getCareEventTheme(status) {
 }
 
 /**
- * Returns Visiting Status strip metadata (positioned directly under Next Care Event)
+ * Returns Visiting Status strip metadata
  */
 function getVisitingStrip(visiting) {
   if (!visiting || visiting.type === 'none') return null;
@@ -313,7 +309,7 @@ function getVisitingStrip(visiting) {
   }
 }
 
-// Render Signage Board with Best Practice Clinical Styling & Visiting Status directly below Next Care Event
+// Render Signage Board inside the 16:10 fixed 10.1" frame
 function renderSignage() {
   const container = document.getElementById('bedCardsContainer');
   if (!container) return;
@@ -330,7 +326,7 @@ function renderSignage() {
     const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
     const displayNurse = state.privacyMode ? "Ns. [Jaga]" : bed.nurse;
 
-    // Badges HTML with Standard Clinical Colors & High Contrast (Safety Badges Only: Fall Risk, NPO, Allergy)
+    // Badges HTML (Safety Badges: Fall Risk, NPO, Allergy)
     const badgesHtml = (bed.badges || []).map(b => {
       let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
       let titleClass = "text-[#78350f] dark:text-amber-200";
@@ -350,11 +346,11 @@ function renderSignage() {
       }
 
       return `
-        <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 py-1.5 sm:py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs">
+        <div class="flex items-center gap-2 px-2.5 py-1 rounded-lg ${bgClass} transition-all duration-200 shadow-2xs flex-1 min-w-0">
           <div class="flex-shrink-0">${icon}</div>
-          <div class="leading-tight">
-            <h4 class="font-extrabold text-sm sm:text-base tracking-tight ${titleClass}">${b.title}</h4>
-            <p class="text-[11px] font-semibold ${subClass} mt-0.5">${b.subtitle}</p>
+          <div class="leading-none min-w-0 truncate">
+            <h4 class="font-extrabold text-[12px] sm:text-[13px] tracking-tight ${titleClass} truncate">${b.title}</h4>
+            <p class="text-[9px] sm:text-[10px] font-semibold ${subClass} mt-0.5 truncate">${b.subtitle}</p>
           </div>
         </div>
       `;
@@ -365,96 +361,89 @@ function renderSignage() {
       : ICONS.getCalendarIcon(theme.iconColor);
 
     return `
-      <!-- BED CARD: ${bed.label} -->
-      <div onclick="editSpecificBed(${index})" class="bed-card-item cursor-pointer bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-200 hover:shadow-md relative overflow-hidden group">
+      <!-- BED CARD ROW: ${bed.label} (Fixed 33.3% height) -->
+      <div onclick="editSpecificBed(${index})" class="bed-card-fixed-row cursor-pointer bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 rounded-xl px-3 py-1.5 sm:py-2 gap-3 shadow-2xs relative group">
         
-        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6">
+        <!-- LEFT: Bed ID + Care Team -->
+        <div class="flex items-center gap-3 sm:gap-4 min-w-[240px] sm:min-w-[260px] flex-shrink-0">
           
-          <!-- LEFT SECTION: Bed Identifier + Care Team -->
-          <div class="flex items-center gap-4 sm:gap-6 min-w-[280px]">
-            
-            <!-- Bed Icon Badge Box (Clean Matching Reference) -->
-            <div class="w-20 sm:w-24 h-20 sm:h-24 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1 sm:gap-1.5 flex-shrink-0 shadow-2xs">
-              ${ICONS.bed}
-              <span class="font-extrabold text-[#0369a1] dark:text-[#38bdf8] text-sm sm:text-base tracking-wider leading-none">${bed.label}</span>
-            </div>
-
-            <!-- Care Team Details -->
-            <div class="space-y-1.5 sm:space-y-2 py-0.5">
-              <div>
-                <p class="text-[11px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Attending physician</p>
-                <h3 class="text-base sm:text-lg font-bold text-[#0f172a] dark:text-white leading-tight tracking-tight">${displayPhysician}</h3>
-              </div>
-              <div>
-                <p class="text-[11px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Resident Medical Officer</p>
-                <h3 class="text-base sm:text-lg font-bold text-[#0f172a] dark:text-white leading-tight tracking-tight">${displayRMO}</h3>
-              </div>
-              <div>
-                <p class="text-[11px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Nurse</p>
-                <h3 class="text-base sm:text-lg font-bold text-[#0f172a] dark:text-white leading-tight tracking-tight">${displayNurse}</h3>
-              </div>
-            </div>
-
+          <!-- Bed Icon Box -->
+          <div class="w-16 h-16 sm:w-18 sm:h-18 rounded-xl bg-[#f0f7ff] dark:bg-sky-950/60 border border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-0.5 flex-shrink-0 shadow-2xs">
+            ${ICONS.bed}
+            <span class="font-extrabold text-[#0369a1] dark:text-[#38bdf8] text-xs sm:text-sm tracking-wider leading-none">${bed.label}</span>
           </div>
 
-          <!-- VERTICAL DIVIDER -->
-          <div class="hidden lg:block w-[1px] h-20 sm:h-24 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
+          <!-- Care Team Details -->
+          <div class="space-y-1">
+            <div>
+              <p class="text-[9px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Attending physician</p>
+              <h3 class="text-xs sm:text-sm font-bold text-[#0f172a] dark:text-white leading-tight truncate">${displayPhysician}</h3>
+            </div>
+            <div>
+              <p class="text-[9px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Resident Medical Officer</p>
+              <h3 class="text-xs sm:text-sm font-bold text-[#0f172a] dark:text-white leading-tight truncate">${displayRMO}</h3>
+            </div>
+            <div>
+              <p class="text-[9px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Nurse</p>
+              <h3 class="text-xs sm:text-sm font-bold text-[#0f172a] dark:text-white leading-tight truncate">${displayNurse}</h3>
+            </div>
+          </div>
 
-          <!-- MIDDLE SECTION: Next Care Event Box + Visiting Status Directly Underneath -->
-          <div class="flex-1 max-w-sm sm:max-w-md flex flex-col gap-2">
-            
-            <!-- 1. Next Care Event Box -->
-            <div class="border ${theme.boxClass} rounded-xl sm:rounded-2xl p-3 sm:p-3.5 transition-all duration-300 relative shadow-2xs">
-              <div>
-                <h3 class="font-extrabold text-sm sm:text-base ${theme.titleClass} tracking-tight mb-1 flex items-center gap-1.5">
-                  <span>${event.title || 'Next Care Event'}</span>
-                  ${theme.pulseDot ? '<span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>' : ''}
-                </h3>
+        </div>
 
-                <div class="flex items-center gap-3">
-                  ${eventIcon}
+        <!-- DIVIDER -->
+        <div class="hidden md:block w-[1px] h-14 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
 
-                  <div class="flex flex-col">
-                    <div class="flex items-center gap-1.5 sm:gap-2">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border ${theme.badgeClass}">
-                        ${event.status}
-                      </span>
-                      <span class="font-bold text-xs sm:text-sm md:text-base ${theme.textClass}">
-                        ${event.name} • ${event.time}
-                      </span>
-                    </div>
-                    <p class="text-[11px] ${theme.noteClass} font-medium mt-0.5">
-                      ${event.note || 'Observation recorded'}
-                    </p>
-                  </div>
+        <!-- MIDDLE: Next Care Event + Visiting Status (Stacked Vertically) -->
+        <div class="flex-1 max-w-xs sm:max-w-sm flex flex-col justify-center gap-1 min-w-0">
+          
+          <!-- Next Care Event Box -->
+          <div class="border ${theme.boxClass} rounded-lg px-2.5 py-1 transition-all duration-300 relative">
+            <h3 class="font-extrabold text-[11px] sm:text-xs ${theme.titleClass} tracking-tight mb-0.5 flex items-center gap-1 leading-none">
+              <span>${event.title || 'Next Care Event'}</span>
+              ${theme.pulseDot ? '<span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-ping"></span>' : ''}
+            </h3>
+
+            <div class="flex items-center gap-2">
+              ${eventIcon}
+
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] font-bold border ${theme.badgeClass}">
+                    ${event.status}
+                  </span>
+                  <span class="font-bold text-[11px] sm:text-xs ${theme.textClass} truncate">
+                    ${event.name} • ${event.time}
+                  </span>
                 </div>
-
+                <p class="text-[9px] ${theme.noteClass} font-medium mt-0.5 truncate">
+                  ${event.note || 'Observation recorded'}
+                </p>
               </div>
             </div>
+          </div>
 
-            <!-- 2. Visiting Status Strip (Placed Directly Under Next Care Event) -->
-            ${visiting ? `
-              <div class="flex items-center justify-between px-3.5 py-1.5 sm:py-2 rounded-xl ${visiting.stripClass} border transition-all shadow-2xs">
-                <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="flex-shrink-0">${visiting.icon}</div>
-                  <div class="flex items-center gap-1.5 min-w-0 truncate">
-                    <span class="font-extrabold text-xs sm:text-sm ${visiting.titleClass} truncate">${visiting.title}</span>
-                    <span class="text-[11px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
-                  </div>
+          <!-- Visiting Status Strip (Directly below Next Care Event) -->
+          ${visiting ? `
+            <div class="flex items-center justify-between px-2.5 py-1 rounded-lg ${visiting.stripClass} border transition-all shadow-2xs">
+              <div class="flex items-center gap-1.5 min-w-0">
+                <div class="flex-shrink-0">${visiting.icon}</div>
+                <div class="flex items-center gap-1 min-w-0 truncate">
+                  <span class="font-extrabold text-[11px] ${visiting.titleClass} truncate">${visiting.title}</span>
+                  <span class="text-[9px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
                 </div>
-                <span class="flex-shrink-0 text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${visiting.badgeClass}">
-                  Visiting
-                </span>
               </div>
-            ` : ''}
+              <span class="flex-shrink-0 text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.2 rounded-full border ${visiting.badgeClass}">
+                Visiting
+              </span>
+            </div>
+          ` : ''}
 
-          </div>
+        </div>
 
-          <!-- RIGHT SECTION: Clinical Safety Badges Stack (Fall Risk, NPO, Allergy) -->
-          <div class="w-full md:w-56 lg:w-60 flex flex-col gap-1.5 sm:gap-2 justify-center flex-shrink-0">
-            ${badgesHtml}
-          </div>
-
+        <!-- RIGHT: Clinical Safety Alerts Only (Stack of 2-3 pills, fixed height) -->
+        <div class="w-44 sm:w-52 flex flex-col gap-1 justify-center flex-shrink-0">
+          ${badgesHtml}
         </div>
 
       </div>
@@ -485,9 +474,9 @@ function setBezelColor(color) {
 // Cycle Hardware Side LED Light Bar (Hospital Standard Status Lights)
 function cycleLedStatus() {
   const ledStates = [
-    { label: "LED: Overdue Alert (Red)", color: "bg-red-500", glow: "shadow-[0_0_15px_rgba(239,68,68,0.9)]", ambient: "bg-red-500/10" },
-    { label: "LED: Normal/Ready (Green)", color: "bg-emerald-500", glow: "shadow-[0_0_15px_rgba(16,185,129,0.9)]", ambient: "bg-emerald-500/10" },
-    { label: "LED: Fall Risk Caution (Yellow)", color: "bg-amber-400", glow: "shadow-[0_0_15px_rgba(251,191,36,0.9)]", ambient: "bg-amber-400/10" }
+    { label: "LED: Alert (Red)", color: "bg-red-500", glow: "shadow-[0_0_15px_rgba(239,68,68,0.9)]", ambient: "bg-red-500/10" },
+    { label: "LED: Ready (Green)", color: "bg-emerald-500", glow: "shadow-[0_0_15px_rgba(16,185,129,0.9)]", ambient: "bg-emerald-500/10" },
+    { label: "LED: Caution (Yellow)", color: "bg-amber-400", glow: "shadow-[0_0_15px_rgba(251,191,36,0.9)]", ambient: "bg-amber-400/10" }
   ];
 
   state.ledStatusIndex = (state.ledStatusIndex + 1) % ledStates.length;
@@ -501,7 +490,7 @@ function cycleLedStatus() {
   ledBar.className = `absolute left-0 top-1/4 bottom-1/4 w-1.5 ${cur.color} rounded-r-md ${cur.glow} animate-pulse transition-all duration-300`;
   ledDot.className = `w-2.5 h-2.5 rounded-full ${cur.color} animate-pulse shadow-sm`;
   ledLabel.textContent = cur.label;
-  ambientGlow.className = `absolute -inset-3 ${cur.ambient} rounded-[44px] filter blur-xl opacity-70 transition-all duration-500`;
+  ambientGlow.className = `absolute -inset-2 ${cur.ambient} rounded-[44px] filter blur-xl opacity-70 transition-all duration-500 pointer-events-none`;
 }
 
 // Toggle Night Mode inside the 10" tablet display

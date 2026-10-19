@@ -1,0 +1,108 @@
+/* Modern Hospital Door Sign Custom Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #f1f5f9;
+  --card-bg: #ffffff;
+  --bed-indicator-bg: #edf4f9;
+  --bed-indicator-text: #2f597e;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --divider-color: #e2e8f0;
+  
+  /* Next Care Event colors */
+  --care-border: #fecaca;
+  --care-bg: #fff5f5;
+  --care-title: #d32f2f;
+  
+  /* Safety Pill Badges */
+  --fall-risk-bg: #fef3c7;
+  --fall-risk-title: #92400e;
+  --fall-risk-sub: #b45309;
+  
+  --npo-bg: #fee2e2;
+  --npo-title: #991b1b;
+  --npo-sub: #b91c1c;
+}
+
+.dark {
+  --bg-color: #0b0f17;
+  --card-bg: #111827;
+  --bed-indicator-bg: #1e293b;
+  --bed-indicator-text: #7dd3fc;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --divider-color: #334155;
+  
+  --care-border: #7f1d1d;
+  --care-bg: #2d1216;
+  --care-title: #f87171;
+  
+  --fall-risk-bg: #451a03;
+  --fall-risk-title: #fde68a;
+  --fall-risk-sub: #fef08a;
+  
+  --npo-bg: #4c0519;
+  --npo-title: #fecdd3;
+  --npo-sub: #fda4af;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Overdue Pulse Animation for Clinical Safety */
+@keyframes softPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+.animate-overdue-pulse {
+  animation: softPulse 2.8s infinite ease-in-out;
+}
+
+/* Bed card hover & focus states */
+.bed-card-item {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.bed-card-item:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.08);
+}
+
+/* Clean scrollbar for modal */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Kiosk Fullscreen Mode styling */
+:fullscreen body, :-webkit-full-screen body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .bed-card-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

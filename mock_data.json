@@ -1,0 +1,118 @@
+{
+  "hospitalName": "St. Elisabeth Medical Center",
+  "roomNumber": "ROOM 308",
+  "wardName": "BANGSAL DAHLIA (RAWAT INAP KELAS I)",
+  "capacity": 3,
+  "lastUpdated": "2026-10-19T14:30:00+07:00",
+  "beds": [
+    {
+      "id": "BED A",
+      "label": "BED A",
+      "status": "OCCUPIED",
+      "patientCode": "RM-994821",
+      "careTeam": {
+        "attendingPhysician": "Dr. Robert Chen",
+        "residentMedicalOfficer": "Dr. Gigi",
+        "nurseInCharge": "Ns. Dian"
+      },
+      "nextCareEvent": {
+        "title": "Next Care Event",
+        "eventName": "Vital signs",
+        "scheduledTime": "14:30",
+        "status": "Overdue",
+        "note": "Nurse attendance not recorded"
+      },
+      "clinicalAlerts": [
+        {
+          "code": "FALL_RISK",
+          "title": "Fall Risk",
+          "subtitle": "Assist with mobility",
+          "severity": "HIGH",
+          "color": "amber"
+        },
+        {
+          "code": "NPO",
+          "title": "NPO",
+          "subtitle": "Nothing by mouth",
+          "severity": "CRITICAL",
+          "color": "rose"
+        },
+        {
+          "code": "ALLERGY",
+          "title": "Allergy",
+          "subtitle": "Penicillin, shellfish",
+          "severity": "CRITICAL",
+          "color": "rose"
+        }
+      ]
+    },
+    {
+      "id": "BED B",
+      "label": "BED B",
+      "status": "OCCUPIED",
+      "patientCode": "RM-994822",
+      "careTeam": {
+        "attendingPhysician": "Dr. Robert Chen",
+        "residentMedicalOfficer": "Dr. Gigi",
+        "nurseInCharge": "Ns. Dian"
+      },
+      "nextCareEvent": {
+        "title": "Next Care Event",
+        "eventName": "Vital signs",
+        "scheduledTime": "14:30",
+        "status": "Overdue",
+        "note": "Nurse attendance not recorded"
+      },
+      "clinicalAlerts": [
+        {
+          "code": "FALL_RISK",
+          "title": "Fall Risk",
+          "subtitle": "Assist with mobility",
+          "severity": "HIGH",
+          "color": "amber"
+        },
+        {
+          "code": "NPO",
+          "title": "NPO",
+          "subtitle": "Nothing by mouth",
+          "severity": "CRITICAL",
+          "color": "rose"
+        }
+      ]
+    },
+    {
+      "id": "BED C",
+      "label": "BED C",
+      "status": "OCCUPIED",
+      "patientCode": "RM-994823",
+      "careTeam": {
+        "attendingPhysician": "Dr. Robert Chen",
+        "residentMedicalOfficer": "Dr. Gigi",
+        "nurseInCharge": "Ns. Dian"
+      },
+      "nextCareEvent": {
+        "title": "Next Care Event",
+        "eventName": "Vital signs",
+        "scheduledTime": "14:30",
+        "status": "Overdue",
+        "note": "Nurse attendance not recorded"
+      },
+      "clinicalAlerts": [
+        {
+          "code": "FALL_RISK",
+          "title": "Fall Risk",
+          "subtitle": "Assist with mobility",
+          "severity": "HIGH",
+          "color": "amber"
+        },
+        {
+          "code": "NPO",
+          "title": "NPO",
+          "subtitle": "Nothing by mouth",
+          "severity": "CRITICAL",
+          "color": "rose"
+        }
+      ]
+    }
+  ]
+}

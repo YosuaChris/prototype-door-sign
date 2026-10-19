@@ -1,0 +1,23 @@
+{
+  "name": "hospital-smart-door-sign",
+  "version": "1.0.0",
+  "description": "Hospital Smart Door Sign - Electronic Bedside & Door Display Kiosk",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve ."
+  },
+  "keywords": [
+    "hospital",
+    "door-sign",
+    "digital-signage",
+    "kiosk",
+    "healthcare",
+    "patient-safety"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

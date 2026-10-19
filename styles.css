@@ -21,25 +21,32 @@
   /* 1. Fall Risk (Yellow / Amber - Standard AHA/KARS Wristband) */
   --fall-bg: #fffbeb;                     /* Amber-50 */
   --fall-border: #fcd34d;                 /* Amber-300 */
-  --fall-title: #78350f;                  /* Amber-900 (High contrast: 8.2:1) */
-  --fall-text: #92400e;                   /* Amber-800 (Contrast: 5.6:1) */
+  --fall-title: #78350f;                  /* Amber-900 */
+  --fall-text: #92400e;                   /* Amber-800 */
   --fall-icon: #b45309;                   /* Amber-700 */
   
   /* 2. Allergy (Red - Universal Medical Allergy Standard) */
   --allergy-bg: #fef2f2;                  /* Red-50 */
   --allergy-border: #fca5a5;              /* Red-300 */
-  --allergy-title: #7f1d1d;               /* Red-900 (Contrast: 9.1:1) */
-  --allergy-text: #991b1b;                /* Red-800 (Contrast: 7.2:1) */
+  --allergy-title: #7f1d1d;               /* Red-900 */
+  --allergy-text: #991b1b;                /* Red-800 */
   --allergy-icon: #dc2626;                /* Red-600 */
   
   /* 3. NPO (Nil Per Os - Diet Restriction / Puasa) */
   --npo-bg: #fff7ed;                      /* Orange-50 */
   --npo-border: #fdba74;                  /* Orange-300 */
-  --npo-title: #7c2d12;                   /* Orange-900 (Contrast: 8.8:1) */
-  --npo-text: #9a3412;                    /* Orange-800 (Contrast: 6.8:1) */
+  --npo-title: #7c2d12;                   /* Orange-900 */
+  --npo-text: #9a3412;                    /* Orange-800 */
   --npo-icon: #ea580c;                    /* Orange-600 */
+
+  /* 4. Visiting Status: Do Not Disturb (Resting / Quiet Hours) */
+  --dnd-bg: #f5f3ff;                      /* Purple-50 */
+  --dnd-border: #ddd6fe;                  /* Purple-200 */
+  --dnd-title: #4c1d95;                   /* Purple-900 */
+  --dnd-text: #6d28d9;                    /* Purple-700 */
+  --dnd-icon: #7c3aed;                    /* Purple-600 */
   
-  /* 4. Next Care Event - Overdue Alert (Clinical Crimson) */
+  /* 5. Next Care Event - Overdue Alert (Clinical Crimson) */
   --overdue-bg: #fff5f5;                  /* Rose/Red-50 */
   --overdue-border: #fda4af;              /* Rose-300 */
   --overdue-title: #be123c;               /* Rose-700 */

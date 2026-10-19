@@ -1,9 +1,9 @@
 /**
- * Hospital Smart Door Sign Application - Dynamic Clinical Event Theming
+ * Hospital Smart Door Sign Application - Clinical Event & Visiting Status System
  * Standardized to JCI / KARS Patient Safety & WCAG AAA Contrast
  */
 
-// Default data matching the user's reference image with standardized clinical coding
+// Default data matching the user's reference image with standardized clinical coding and visiting status
 const DEFAULT_ROOM_DATA = {
   roomNumber: "ROOM 308",
   wardName: "BANGSAL DAHLIA (RAWAT INAP KELAS I)",
@@ -14,6 +14,11 @@ const DEFAULT_ROOM_DATA = {
       physician: "Dr. Robert Chen",
       rmo: "Dr. Gigi",
       nurse: "Ns. Dian",
+      visitingStatus: {
+        type: "dnd",
+        title: "Do Not Disturb",
+        note: "Patient resting • No entry"
+      },
       careEvent: {
         title: "Next Care Event",
         status: "Overdue",
@@ -48,6 +53,11 @@ const DEFAULT_ROOM_DATA = {
       physician: "Dr. Robert Chen",
       rmo: "Dr. Gigi",
       nurse: "Ns. Dian",
+      visitingStatus: {
+        type: "allowed",
+        title: "Visiting Allowed",
+        note: "Max 2 visitors • Mask on"
+      },
       careEvent: {
         title: "Next Care Event",
         status: "In Progress",
@@ -76,6 +86,11 @@ const DEFAULT_ROOM_DATA = {
       physician: "Dr. Robert Chen",
       rmo: "Dr. Gigi",
       nurse: "Ns. Dian",
+      visitingStatus: {
+        type: "family_only",
+        title: "Family Only",
+        note: "Immediate family members only"
+      },
       careEvent: {
         title: "Next Care Event",
         status: "Scheduled",
@@ -111,7 +126,7 @@ let state = {
   ledStatusIndex: 0
 };
 
-// Standardized Clinical Vector Icons (Using currentColor for contextual theme adaptability)
+// Standardized Clinical Vector Icons
 const ICONS = {
   bed: `
     <svg class="w-10 h-10 sm:w-11 sm:h-11 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -141,7 +156,35 @@ const ICONS = {
       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   `,
-  // Function to get dynamically colored calendar icon
+  // Moon Icon for Do Not Disturb
+  moon: `
+    <svg class="w-5 h-5 text-[#7c3aed] dark:text-[#c4b5fd] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  `,
+  // Users Icon for Visiting Allowed
+  users: `
+    <svg class="w-5 h-5 text-[#059669] dark:text-[#6ee7b7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+      <circle cx="9" cy="7" r="4"></circle>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+    </svg>
+  `,
+  // Heart Icon for Family Only
+  family: `
+    <svg class="w-5 h-5 text-[#0284c7] dark:text-[#7dd3fc] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+  `,
+  // Stethoscope Icon for Procedure in progress
+  procedure: `
+    <svg class="w-5 h-5 text-[#d97706] dark:text-[#fcd34d] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"></path>
+      <path d="M9 12.5V17a3 3 0 0 0 6 0v-2.5"></path>
+      <circle cx="15" cy="14.5" r="2.5"></circle>
+    </svg>
+  `,
   getCalendarIcon: (colorClass) => `
     <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
@@ -153,7 +196,6 @@ const ICONS = {
       <circle cx="16" cy="15" r="0.8" fill="currentColor"></circle>
     </svg>
   `,
-  // Checkmark icon for Completed events
   getCheckIcon: (colorClass) => `
     <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -163,11 +205,7 @@ const ICONS = {
 };
 
 /**
- * Returns contextual clinical theme based on care event status:
- * - Overdue: Red / Clinical Crimson (Emergency / Urgent Action)
- * - In Progress: Sky / Active Clinical Cyan (Ongoing Activity)
- * - Scheduled: Slate / Neutral Medical (Upcoming on track)
- * - Done / Completed: Emerald / Calming Green (Finished)
+ * Returns contextual clinical theme based on care event status
  */
 function getCareEventTheme(status) {
   const normStatus = (status || '').toLowerCase().trim();
@@ -211,7 +249,6 @@ function getCareEventTheme(status) {
     };
   }
 
-  // Default: Scheduled / Upcoming
   return {
     boxClass: 'border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/40',
     titleClass: 'text-slate-700 dark:text-slate-200',
@@ -224,7 +261,59 @@ function getCareEventTheme(status) {
   };
 }
 
-// Render Signage Board with Best Practice Clinical Styling
+/**
+ * Returns Visiting Status badge metadata
+ */
+function getVisitingBadge(visiting) {
+  if (!visiting || visiting.type === 'none') return null;
+
+  switch (visiting.type) {
+    case 'dnd':
+      return {
+        pillClass: 'bg-purple-100 text-purple-900 border-purple-300 dark:bg-purple-950/80 dark:text-purple-200 dark:border-purple-800',
+        cardClass: 'bg-[#f5f3ff] dark:bg-purple-950/70 border border-[#ddd6fe] dark:border-purple-800',
+        titleClass: 'text-[#4c1d95] dark:text-purple-200',
+        subClass: 'text-[#6d28d9] dark:text-purple-300',
+        title: visiting.title || 'Do Not Disturb',
+        subtitle: visiting.note || 'Patient resting • No entry',
+        icon: ICONS.moon
+      };
+    case 'allowed':
+      return {
+        pillClass: 'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-200 dark:border-emerald-800',
+        cardClass: 'bg-[#f0fdf4] dark:bg-emerald-950/70 border border-[#bbf7d0] dark:border-emerald-800',
+        titleClass: 'text-[#14532d] dark:text-emerald-200',
+        subClass: 'text-[#15803d] dark:text-emerald-300',
+        title: visiting.title || 'Visiting Allowed',
+        subtitle: visiting.note || 'Max 2 visitors • Mask on',
+        icon: ICONS.users
+      };
+    case 'family_only':
+      return {
+        pillClass: 'bg-sky-100 text-sky-900 border-sky-300 dark:bg-sky-950/80 dark:text-sky-200 dark:border-sky-800',
+        cardClass: 'bg-[#f0f9ff] dark:bg-sky-950/70 border border-[#bae6fd] dark:border-sky-800',
+        titleClass: 'text-[#0c4a6e] dark:text-sky-200',
+        subClass: 'text-[#0369a1] dark:text-sky-300',
+        title: visiting.title || 'Family Only',
+        subtitle: visiting.note || 'Immediate family members only',
+        icon: ICONS.family
+      };
+    case 'procedure':
+      return {
+        pillClass: 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-800',
+        cardClass: 'bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fde68a] dark:border-amber-800',
+        titleClass: 'text-[#78350f] dark:text-amber-200',
+        subClass: 'text-[#b45309] dark:text-amber-300',
+        title: visiting.title || 'Procedure in Progress',
+        subtitle: visiting.note || 'Medical exam • Please wait',
+        icon: ICONS.procedure
+      };
+    default:
+      return null;
+  }
+}
+
+// Render Signage Board with Best Practice Clinical Styling & Visiting Status
 function renderSignage() {
   const container = document.getElementById('bedCardsContainer');
   if (!container) return;
@@ -235,6 +324,7 @@ function renderSignage() {
   container.innerHTML = state.data.beds.map((bed, index) => {
     const event = bed.careEvent || {};
     const theme = getCareEventTheme(event.status);
+    const visiting = getVisitingBadge(bed.visitingStatus);
 
     const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : bed.physician;
     const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
@@ -248,13 +338,11 @@ function renderSignage() {
       let icon = ICONS.fallRisk;
 
       if (b.type === 'npo') {
-        // NPO: Warm Coral / Terracotta (Clear distinction from acute allergy)
         bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border border-[#fdba74] dark:border-orange-800";
         titleClass = "text-[#7c2d12] dark:text-orange-200";
         subClass = "text-[#9a3412] dark:text-orange-300";
         icon = ICONS.npo;
       } else if (b.type === 'allergy') {
-        // Allergy: Universal Medical Red
         bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border border-[#fca5a5] dark:border-red-800";
         titleClass = "text-[#7f1d1d] dark:text-red-200";
         subClass = "text-[#991b1b] dark:text-red-300";
@@ -262,7 +350,7 @@ function renderSignage() {
       }
 
       return `
-        <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs">
+        <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 py-1.5 sm:py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs">
           <div class="flex-shrink-0">${icon}</div>
           <div class="leading-tight">
             <h4 class="font-extrabold text-sm sm:text-base tracking-tight ${titleClass}">${b.title}</h4>
@@ -271,6 +359,20 @@ function renderSignage() {
         </div>
       `;
     }).join('');
+
+    // Visiting Status Badge in Right Column (If Do Not Disturb or active restriction)
+    let visitingBadgeHtml = '';
+    if (visiting && visiting.title) {
+      visitingBadgeHtml = `
+        <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 py-1.5 sm:py-2 rounded-xl ${visiting.cardClass} transition-all duration-200 shadow-2xs">
+          <div class="flex-shrink-0">${visiting.icon}</div>
+          <div class="leading-tight">
+            <h4 class="font-extrabold text-sm sm:text-base tracking-tight ${visiting.titleClass}">${visiting.title}</h4>
+            <p class="text-[11px] font-semibold ${visiting.subClass} mt-0.5">${visiting.subtitle}</p>
+          </div>
+        </div>
+      `;
+    }
 
     const eventIcon = theme.iconType === 'check' 
       ? ICONS.getCheckIcon(theme.iconColor) 
@@ -286,9 +388,14 @@ function renderSignage() {
           <div class="flex items-center gap-4 sm:gap-6 min-w-[280px]">
             
             <!-- Bed Icon Badge Box (Clinical Deep Blue) -->
-            <div class="w-20 sm:w-24 h-20 sm:h-24 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1 sm:gap-1.5 flex-shrink-0 shadow-2xs">
+            <div class="w-20 sm:w-24 h-20 sm:h-24 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1 sm:gap-1.5 flex-shrink-0 shadow-2xs relative">
               ${ICONS.bed}
               <span class="font-extrabold text-[#0369a1] dark:text-[#38bdf8] text-sm sm:text-base tracking-wider leading-none">${bed.label}</span>
+              ${visiting ? `
+                <span class="absolute -bottom-2 px-1.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider border shadow-2xs leading-none ${visiting.pillClass}">
+                  ${visiting.title}
+                </span>
+              ` : ''}
             </div>
 
             <!-- Care Team Details (High Contrast Slate Hierarchy) -->
@@ -343,8 +450,9 @@ function renderSignage() {
             </div>
           </div>
 
-          <!-- RIGHT SECTION: Standardized Safety Badges Stack -->
+          <!-- RIGHT SECTION: Standardized Safety & Visiting Badges Stack -->
           <div class="w-full md:w-56 lg:w-60 flex flex-col gap-1.5 sm:gap-2 justify-center flex-shrink-0">
+            ${visitingBadgeHtml}
             ${badgesHtml}
           </div>
 
@@ -367,9 +475,9 @@ function setBezelColor(color) {
     const btn = document.getElementById(`bezelBtn${c.charAt(0).toUpperCase() + c.slice(1)}`);
     if (btn) {
       if (c === color) {
-        btn.classList.add('ring-2', 'ring-blue-400', 'scale-110');
+        btn.classList.add('ring-2', 'ring-sky-400', 'scale-110');
       } else {
-        btn.classList.remove('ring-2', 'ring-blue-400', 'scale-110');
+        btn.classList.remove('ring-2', 'ring-sky-400', 'scale-110');
       }
     }
   });
@@ -487,6 +595,11 @@ function loadBedIntoForm(index) {
   document.getElementById('inputRoomNumber').value = state.data.roomNumber || "ROOM 308";
   document.getElementById('inputWardName').value = state.data.wardName || "BANGSAL DAHLIA";
 
+  // Visiting status
+  const visiting = bed.visitingStatus || { type: 'none', note: '' };
+  document.getElementById('inputVisitingStatus').value = visiting.type || 'none';
+  document.getElementById('inputVisitingNote').value = visiting.note || '';
+
   document.getElementById('inputPhysician').value = bed.physician;
   document.getElementById('inputRmo').value = bed.rmo;
   document.getElementById('inputNurse').value = bed.nurse;
@@ -519,6 +632,20 @@ function saveBedChanges(event) {
 
   const currentBed = state.data.beds[state.activeBedIndex];
   if (!currentBed) return;
+
+  // Save Visiting Status
+  const visitType = document.getElementById('inputVisitingStatus').value;
+  const visitNote = document.getElementById('inputVisitingNote').value;
+  let visitTitle = 'Visiting Allowed';
+  if (visitType === 'dnd') visitTitle = 'Do Not Disturb';
+  else if (visitType === 'family_only') visitTitle = 'Family Only';
+  else if (visitType === 'procedure') visitTitle = 'Procedure in Progress';
+
+  currentBed.visitingStatus = {
+    type: visitType,
+    title: visitTitle,
+    note: visitNote
+  };
 
   currentBed.physician = document.getElementById('inputPhysician').value;
   currentBed.rmo = document.getElementById('inputRmo').value;

@@ -3,6 +3,7 @@
   "roomNumber": "ROOM 308",
   "wardName": "BANGSAL DAHLIA (RAWAT INAP KELAS I)",
   "capacity": 3,
+  "visitingHours": "10:00 - 12:00 & 17:00 - 20:00 WIB",
   "lastUpdated": "2026-10-19T14:30:00+07:00",
   "beds": [
     {
@@ -10,6 +11,12 @@
       "label": "BED A",
       "status": "OCCUPIED",
       "patientCode": "RM-994821",
+      "visitingStatus": {
+        "status": "DND",
+        "title": "Do Not Disturb",
+        "subtitle": "Patient resting • No entry",
+        "badgeColor": "purple"
+      },
       "careTeam": {
         "attendingPhysician": "Dr. Robert Chen",
         "residentMedicalOfficer": "Dr. Gigi",
@@ -35,7 +42,7 @@
           "title": "NPO",
           "subtitle": "Nothing by mouth",
           "severity": "CRITICAL",
-          "color": "rose"
+          "color": "orange"
         },
         {
           "code": "ALLERGY",
@@ -51,6 +58,12 @@
       "label": "BED B",
       "status": "OCCUPIED",
       "patientCode": "RM-994822",
+      "visitingStatus": {
+        "status": "ALLOWED",
+        "title": "Visiting Allowed",
+        "subtitle": "Max 2 visitors • Mask on",
+        "badgeColor": "emerald"
+      },
       "careTeam": {
         "attendingPhysician": "Dr. Robert Chen",
         "residentMedicalOfficer": "Dr. Gigi",
@@ -60,8 +73,8 @@
         "title": "Next Care Event",
         "eventName": "Vital signs",
         "scheduledTime": "14:30",
-        "status": "Overdue",
-        "note": "Nurse attendance not recorded"
+        "status": "In Progress",
+        "note": "Vital signs observation in progress"
       },
       "clinicalAlerts": [
         {
@@ -76,7 +89,7 @@
           "title": "NPO",
           "subtitle": "Nothing by mouth",
           "severity": "CRITICAL",
-          "color": "rose"
+          "color": "orange"
         }
       ]
     },
@@ -85,6 +98,12 @@
       "label": "BED C",
       "status": "OCCUPIED",
       "patientCode": "RM-994823",
+      "visitingStatus": {
+        "status": "FAMILY_ONLY",
+        "title": "Family Only",
+        "subtitle": "Immediate family members only",
+        "badgeColor": "sky"
+      },
       "careTeam": {
         "attendingPhysician": "Dr. Robert Chen",
         "residentMedicalOfficer": "Dr. Gigi",
@@ -92,10 +111,10 @@
       },
       "nextCareEvent": {
         "title": "Next Care Event",
-        "eventName": "Vital signs",
-        "scheduledTime": "14:30",
-        "status": "Overdue",
-        "note": "Nurse attendance not recorded"
+        "eventName": "Doctor Round",
+        "scheduledTime": "15:00",
+        "status": "Scheduled",
+        "note": "DPJP routine check-in"
       },
       "clinicalAlerts": [
         {
@@ -110,7 +129,7 @@
           "title": "NPO",
           "subtitle": "Nothing by mouth",
           "severity": "CRITICAL",
-          "color": "rose"
+          "color": "orange"
         }
       ]
     }

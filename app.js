@@ -618,7 +618,7 @@ function renderTwoBedSideBySide(bed, index) {
     ? ICONS.getCheckIcon(theme.iconColor) 
     : ICONS.getCalendarIcon(theme.iconColor);
 
-  const badgesHtml = (bed.badges || []).map(b => {
+  const badgesHtml = (bed.badges || []).map((b, idx) => {
     let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
     let titleClass = "text-[#78350f] dark:text-amber-200";
     let subClass = "text-[#92400e] dark:text-amber-300";
@@ -636,12 +636,17 @@ function renderTwoBedSideBySide(bed, index) {
       icon = ICONS.allergy;
     }
 
+    // Grid 2 Kolom x 2 Baris:
+    // Jika 3 badge, badge ke-3 membentang 2 kolom (col-span-2) agar mengisi baris ke-2 secara simetris
+    // Jika 4 badge, masing-masing col-span-1 membentuk kotak 2x2 sempurna
+    const colSpan = ((bed.badges || []).length === 3 && idx === 2) ? 'col-span-2' : 'col-span-1';
+
     return `
-      <div class="flex items-center gap-2.5 px-3 py-2 sm:py-2.5 rounded-xl ${bgClass} shadow-2xs min-w-0">
+      <div class="flex items-center gap-2.5 px-3 py-2 sm:py-2.5 rounded-xl ${bgClass} shadow-2xs min-w-0 ${colSpan}">
         <div class="flex-shrink-0">${icon}</div>
         <div class="leading-none min-w-0 truncate">
-          <h4 class="font-black text-[13.5px] sm:text-[14.5px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
-          <p class="text-[11px] sm:text-xs font-bold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
+          <h4 class="font-black text-xs sm:text-[13.5px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+          <p class="text-[10px] sm:text-[11px] font-bold ${subClass} mt-0.5 truncate leading-tight">${b.subtitle}</p>
         </div>
       </div>
     `;
@@ -706,34 +711,53 @@ function renderTwoBedSideBySide(bed, index) {
         </div>
       </div>
 
-      <!-- CLINICAL SAFETY ALERTS (Middle - Priority Indikator Keselamatan) -->
-      <div class="flex-1 flex flex-col justify-start gap-1.5 min-h-0">
+      <!-- CLINICAL SAFETY ALERTS (Grid 2 Kolom x 2 Baris) -->
+      <div class="flex flex-col justify-start gap-1.5 min-h-0">
         <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
           <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
           <span>Indikator Keselamatan Pasien</span>
         </div>
-        <div class="flex flex-col gap-1.5">
+        <div class="grid grid-cols-2 gap-2">
           ${badgesHtml}
         </div>
       </div>
 
-      <!-- NEXT CARE EVENT (Compact Single-Line Bar - Mengalah untuk Mencegah Penumpukan) -->
-      <div class="flex-shrink-0 flex items-center justify-between px-3 py-2 sm:py-2.5 rounded-xl border-2 ${theme.boxClass} shadow-2xs transition-all">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="flex-shrink-0">
+      <!-- NEXT CARE PLAN / EVENT (Expanded, High-Legibility Clinical Care Card) -->
+      <div class="flex-shrink-0 border-2 ${theme.boxClass} rounded-2xl p-3 sm:p-3.5 transition-all duration-300 shadow-2xs">
+        <div class="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-200/60 dark:border-slate-700/60">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10.5px] font-black uppercase tracking-wider ${theme.titleClass} flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 ${theme.iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>${event.title || 'Next Care Plan'}</span>
+            </span>
+            ${theme.pulseDot ? '<span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>' : ''}
+          </div>
+          <span class="text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md border ${theme.badgeClass}">
+            ${event.status}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700/80 flex items-center justify-center flex-shrink-0 shadow-2xs">
             ${theme.iconType === 'check' 
-              ? `<svg class="w-4 h-4 ${theme.iconColor}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
-              : `<svg class="w-4 h-4 ${theme.iconColor}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
+              ? `<svg class="w-5 h-5 ${theme.iconColor}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+              : `<svg class="w-5 h-5 ${theme.iconColor}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
             }
           </div>
-          <div class="flex items-center gap-1.5 min-w-0 truncate">
-            <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Next:</span>
-            <span class="font-extrabold text-xs sm:text-sm ${theme.textClass} truncate">${event.name} • ${event.time}</span>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs sm:text-[13px] font-black px-2 py-0.5 rounded-md bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-2xs">
+                ${event.time}
+              </span>
+              <h4 class="font-black text-sm sm:text-base md:text-[16px] ${theme.textClass} truncate leading-tight">
+                ${event.name}
+              </h4>
+            </div>
+            <p class="text-[11px] sm:text-xs font-semibold ${theme.noteClass} mt-1 truncate">
+              ${event.note || 'Observation recorded'}
+            </p>
           </div>
         </div>
-        <span class="flex-shrink-0 text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${theme.badgeClass}">
-          ${event.status}
-        </span>
       </div>
 
     </div>

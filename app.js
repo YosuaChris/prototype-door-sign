@@ -637,11 +637,11 @@ function renderTwoBedSideBySide(bed, index) {
     }
 
     return `
-      <div class="flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl ${bgClass} shadow-2xs min-w-0">
+      <div class="flex items-center gap-2.5 px-3 py-2 sm:py-2.5 rounded-xl ${bgClass} shadow-2xs min-w-0">
         <div class="flex-shrink-0">${icon}</div>
         <div class="leading-none min-w-0 truncate">
-          <h4 class="font-extrabold text-xs sm:text-[13px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
-          <p class="text-[10px] sm:text-[11px] font-semibold ${subClass} mt-0.5 truncate leading-tight">${b.subtitle}</p>
+          <h4 class="font-black text-[13.5px] sm:text-[14.5px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+          <p class="text-[11px] sm:text-xs font-bold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
         </div>
       </div>
     `;
@@ -655,7 +655,7 @@ function renderTwoBedSideBySide(bed, index) {
         <div class="flex items-center gap-2.5 sm:gap-3">
           <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border-2 border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-0.5 shadow-2xs flex-shrink-0">
             ${ICONS.bed}
-            <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-xs sm:text-sm tracking-wider leading-none">${bed.label}</span>
+            <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-sm sm:text-base tracking-wider leading-none">${bed.label}</span>
           </div>
           <div>
             <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">STATUS BED</span>
@@ -667,33 +667,42 @@ function renderTwoBedSideBySide(bed, index) {
         </div>
 
         ${visiting ? `
-          <div class="flex items-center gap-2 px-2.5 py-1.5 sm:py-2 rounded-xl ${visiting.stripClass} border-2 shadow-2xs max-w-[190px] sm:max-w-[220px]">
+          <div class="flex items-center gap-2 px-2.5 py-1.5 sm:py-2 rounded-xl ${visiting.stripClass} border-2 shadow-2xs max-w-[200px] sm:max-w-[230px]">
             <div class="flex-shrink-0">${visiting.icon}</div>
             <div class="leading-tight min-w-0 truncate">
-              <h4 class="font-black text-xs sm:text-[13px] ${visiting.titleClass} truncate">${visiting.title}</h4>
-              <p class="text-[10px] sm:text-[11px] font-semibold ${visiting.subClass} truncate">${visiting.subtitle}</p>
+              <h4 class="font-black text-xs sm:text-sm ${visiting.titleClass} truncate">${visiting.title}</h4>
+              <p class="text-[10.5px] sm:text-xs font-semibold ${visiting.subClass} truncate">${visiting.subtitle}</p>
             </div>
           </div>
         ` : ''}
       </div>
 
-      <!-- CARE TEAM SECTION -->
-      <div class="bg-slate-50/90 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 rounded-xl p-2.5 sm:p-3 space-y-1.5">
-        <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-0.5">
-          <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
-          <span>Tim Medis Pasien</span>
+      <!-- CARE TEAM SECTION (Optimized Readability & Tiered Hierarchy) -->
+      <div class="bg-slate-50/90 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 rounded-xl p-2.5 sm:p-3 space-y-1.5 sm:space-y-2">
+        <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/80 pb-1">
+          <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+            <span>Tim Medis Pasien</span>
+          </div>
+          <span class="text-[9.5px] font-bold text-sky-600 dark:text-sky-400">Tim DPJP</span>
         </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[10.5px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400">DPJP (Dokter Utama)</span>
-          <span class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white truncate ml-2">${displayPhysician}</span>
+
+        <!-- DPJP (Full Width Stacked - High Legibility 16px Font) -->
+        <div>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">DPJP (Dokter Penanggung Jawab)</span>
+          <h4 class="text-sm sm:text-base md:text-[16px] font-black text-slate-900 dark:text-white truncate mt-0.5 leading-tight">${displayPhysician}</h4>
         </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[10.5px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400">Dokter Ruangan (RMO)</span>
-          <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 truncate ml-2">${displayRMO}</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[10.5px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400">Perawat Penanggung Jawab</span>
-          <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 truncate ml-2">${displayNurse}</span>
+
+        <!-- RMO & Nurse (Clean 2-Column Split) -->
+        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200/60 dark:border-slate-700/60">
+          <div class="min-w-0">
+            <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider block truncate">Dokter Ruangan (RMO)</span>
+            <h5 class="text-xs sm:text-[13.5px] font-extrabold text-slate-800 dark:text-slate-200 truncate mt-0.5">${displayRMO}</h5>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider block truncate">Perawat Jaga</span>
+            <h5 class="text-xs sm:text-[13.5px] font-extrabold text-slate-800 dark:text-slate-200 truncate mt-0.5">${displayNurse}</h5>
+          </div>
         </div>
       </div>
 
@@ -719,7 +728,7 @@ function renderTwoBedSideBySide(bed, index) {
           </div>
           <div class="flex items-center gap-1.5 min-w-0 truncate">
             <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Next:</span>
-            <span class="font-extrabold text-xs sm:text-[13px] ${theme.textClass} truncate">${event.name} • ${event.time}</span>
+            <span class="font-extrabold text-xs sm:text-sm ${theme.textClass} truncate">${event.name} • ${event.time}</span>
           </div>
         </div>
         <span class="flex-shrink-0 text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${theme.badgeClass}">
@@ -906,14 +915,14 @@ function renderVipRoom(bed, index) {
 
     return `
       <div class="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:py-3 rounded-xl ${bgClass} shadow-2xs min-w-0">
-        <div class="flex items-center gap-2.5 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div class="flex-shrink-0">${icon}</div>
           <div class="leading-none min-w-0 truncate">
-            <h4 class="font-extrabold text-xs sm:text-sm tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
-            <p class="text-[11px] sm:text-xs font-semibold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
+            <h4 class="font-black text-sm sm:text-base md:text-[16.5px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+            <p class="text-xs sm:text-[13px] font-bold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
           </div>
         </div>
-        <span class="flex-shrink-0 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${standardBadge}">
+        <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${standardBadge}">
           ${b.standard || 'AHA Standard'}
         </span>
       </div>
@@ -944,16 +953,16 @@ function renderVipRoom(bed, index) {
 
     return `
       <div class="flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl border ${borderStyle} shadow-2xs">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="flex-shrink-0 text-xs font-black font-mono px-2 py-0.5 rounded-md ${timeBadgeClass}">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="flex-shrink-0 text-xs sm:text-sm font-black font-mono px-2.5 py-1 rounded-md ${timeBadgeClass}">
             ${item.time}
           </span>
           <div class="min-w-0 truncate">
-            <h4 class="font-extrabold text-xs sm:text-[13px] text-slate-900 dark:text-white truncate">${item.name}</h4>
-            <p class="text-[10.5px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">${item.note} • ${item.staff || ''}</p>
+            <h4 class="font-extrabold text-sm sm:text-[14.5px] text-slate-900 dark:text-white truncate">${item.name}</h4>
+            <p class="text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">${item.note} • ${item.staff || ''}</p>
           </div>
         </div>
-        <span class="flex-shrink-0 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${statusBadgeClass}">
+        <span class="flex-shrink-0 text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${statusBadgeClass}">
           ${item.status}
         </span>
       </div>
@@ -1004,9 +1013,9 @@ function renderVipRoom(bed, index) {
             <div class="flex-shrink-0 p-1 rounded-xl bg-white/60 dark:bg-slate-900/60">${visiting.icon}</div>
             <div class="leading-tight min-w-0 truncate">
               <div class="flex items-center gap-2">
-                <span class="font-black text-xs sm:text-sm ${visiting.titleClass} truncate">${visiting.title}</span>
+                <span class="font-black text-sm sm:text-base ${visiting.titleClass} truncate">${visiting.title}</span>
               </div>
-              <p class="text-[11px] sm:text-xs font-semibold ${visiting.subClass} mt-0.5 truncate">${visiting.subtitle}</p>
+              <p class="text-xs sm:text-[13px] font-bold ${visiting.subClass} mt-0.5 truncate">${visiting.subtitle}</p>
             </div>
           </div>
           <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">
@@ -1025,36 +1034,36 @@ function renderVipRoom(bed, index) {
           <span class="text-[10px] font-bold text-sky-600 dark:text-sky-400">24/7 Primary Care</span>
         </div>
 
-        <!-- DPJP Utama -->
-        <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-sky-50/60 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/50">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+        <!-- DPJP Utama (Prominent 17px Display) -->
+        <div class="flex items-center justify-between gap-2.5 p-2.5 sm:p-3 rounded-xl bg-sky-50/60 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/50">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-xs">
               Dr
             </div>
             <div class="min-w-0 truncate">
-              <span class="text-[10px] font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider block">DPJP (Dokter Spesialis Utama)</span>
-              <span class="text-xs sm:text-[13px] font-black text-slate-900 dark:text-white truncate block">${displayPhysician}</span>
+              <span class="text-[10px] sm:text-[10.5px] font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider block">DPJP (Dokter Spesialis Utama)</span>
+              <span class="text-sm sm:text-base md:text-[17px] font-black text-slate-900 dark:text-white truncate block mt-0.5 leading-tight">${displayPhysician}</span>
             </div>
           </div>
-          <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex-shrink-0">Sp.PD-KGEH</span>
+          <span class="text-xs font-bold text-sky-800 dark:text-sky-200 bg-sky-100 dark:bg-sky-900/60 px-2 py-0.5 rounded border border-sky-200 dark:border-sky-800 flex-shrink-0">Sp.PD-KGEH</span>
         </div>
 
         <!-- Dokter Jaga Ruangan (RMO) -->
-        <div class="flex items-center justify-between gap-2 px-2 py-1">
+        <div class="flex items-center justify-between gap-2 px-2.5 py-1">
           <div class="min-w-0 truncate">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Dokter Ruangan (RMO)</span>
-            <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 truncate block">${displayRMO}</span>
+            <span class="text-[10px] sm:text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block">Dokter Ruangan (RMO)</span>
+            <span class="text-sm sm:text-[15px] font-black text-slate-800 dark:text-slate-100 truncate block mt-0.5">${displayRMO}</span>
           </div>
-          <span class="text-[10px] font-medium text-slate-400 flex-shrink-0">Lantai 7</span>
+          <span class="text-[11px] font-semibold text-slate-400 flex-shrink-0">Lantai 7</span>
         </div>
 
         <!-- Perawat Primer Penanggung Jawab -->
-        <div class="flex items-center justify-between gap-2 px-2 py-1 border-t border-slate-100 dark:border-slate-800/80">
+        <div class="flex items-center justify-between gap-2 px-2.5 py-1 border-t border-slate-100 dark:border-slate-800/80">
           <div class="min-w-0 truncate">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Perawat Primer (Primary Nurse)</span>
-            <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 truncate block">${displayNurse}</span>
+            <span class="text-[10px] sm:text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block">Perawat Primer (Primary Nurse)</span>
+            <span class="text-sm sm:text-[15px] font-black text-slate-800 dark:text-slate-100 truncate block mt-0.5">${displayNurse}</span>
           </div>
-          <span class="text-[10px] font-bold text-sky-600 dark:text-sky-400 flex-shrink-0">Ext: 7011</span>
+          <span class="text-[11px] font-bold text-sky-600 dark:text-sky-400 flex-shrink-0">Ext: 7011</span>
         </div>
 
         <!-- Bottom Concierge Station Bar -->

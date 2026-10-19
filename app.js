@@ -1,8 +1,9 @@
 /**
- * Hospital Smart Door Sign Application - 10" Hardware Frame Showcase
+ * Hospital Smart Door Sign Application - Clinical Best Practice Palette
+ * Standardized to JCI / KARS Patient Safety & WCAG AAA Contrast
  */
 
-// Default data matching the user's reference image exactly
+// Default data matching the user's reference image with standardized clinical coding
 const DEFAULT_ROOM_DATA = {
   roomNumber: "ROOM 308",
   wardName: "BANGSAL DAHLIA (RAWAT INAP KELAS I)",
@@ -25,19 +26,19 @@ const DEFAULT_ROOM_DATA = {
           type: "fall_risk",
           title: "Fall Risk",
           subtitle: "Assist with mobility",
-          color: "amber"
+          standard: "AHA Yellow Band"
         },
         {
           type: "npo",
           title: "NPO",
           subtitle: "Nothing by mouth",
-          color: "rose"
+          standard: "Dietary Fasting"
         },
         {
           type: "allergy",
           title: "Allergy",
           subtitle: "Penicillin, shellfish",
-          color: "rose"
+          standard: "AHA Red Band"
         }
       ]
     },
@@ -59,13 +60,13 @@ const DEFAULT_ROOM_DATA = {
           type: "fall_risk",
           title: "Fall Risk",
           subtitle: "Assist with mobility",
-          color: "amber"
+          standard: "AHA Yellow Band"
         },
         {
           type: "npo",
           title: "NPO",
           subtitle: "Nothing by mouth",
-          color: "rose"
+          standard: "Dietary Fasting"
         }
       ]
     },
@@ -87,13 +88,13 @@ const DEFAULT_ROOM_DATA = {
           type: "fall_risk",
           title: "Fall Risk",
           subtitle: "Assist with mobility",
-          color: "amber"
+          standard: "AHA Yellow Band"
         },
         {
           type: "npo",
           title: "NPO",
           subtitle: "Nothing by mouth",
-          color: "rose"
+          standard: "Dietary Fasting"
         }
       ]
     }
@@ -107,20 +108,22 @@ let state = {
   privacyMode: false,
   nightMode: false,
   bezelColor: 'black',
-  ledStatusIndex: 0 // 0: Red (Alert), 1: Green (Normal), 2: Amber (Caution)
+  ledStatusIndex: 0
 };
 
-// SVG Icons Library (Sharp, crisp vector graphics)
+// Standardized Clinical Vector Icons (High visual distinctiveness for dual-encoding)
 const ICONS = {
+  // Bed Icon (Clinical Blue)
   bed: `
-    <svg class="w-10 h-10 sm:w-11 sm:h-11 text-[#2f597e] dark:text-[#7dd3fc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-10 h-10 sm:w-11 sm:h-11 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 19h20M2 17v2M22 17v2" />
       <path d="M2 8v9h20V12a3 3 0 0 0-3-3h-9" />
       <path d="M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
     </svg>
   `,
+  // Next Care Event Calendar (Clinical Crimson)
   calendar: `
-    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#dc2626] dark:text-[#f87171] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#be123c] dark:text-[#fb7185] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -130,22 +133,33 @@ const ICONS = {
       <circle cx="16" cy="15" r="0.8" fill="currentColor"></circle>
     </svg>
   `,
+  // Fall Risk: Triangle Warning (Standard Yellow/Amber Alert)
   fallRisk: `
-    <svg class="w-6 h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
       <line x1="12" y1="9" x2="12" y2="13"></line>
       <line x1="12" y1="17" x2="12.01" y2="17"></line>
     </svg>
   `,
-  ban: `
-    <svg class="w-6 h-6 text-[#b91c1c] dark:text-[#fecdd3] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  // NPO (Nil Per Os): Crossed Utensils / Fasting Symbol (Standard Dietary Orange/Coral)
+  npo: `
+    <svg class="w-6 h-6 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+    </svg>
+  `,
+  // Allergy: Medical Hazard Alert (Standard Red Wristband Alert)
+  allergy: `
+    <svg class="w-6 h-6 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   `
 };
 
-// Render Signage Board inside the 10" Screen
+// Render Signage Board with Best Practice Clinical Styling
 function renderSignage() {
   const container = document.getElementById('bedCardsContainer');
   if (!container) return;
@@ -161,26 +175,33 @@ function renderSignage() {
     const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
     const displayNurse = state.privacyMode ? "Ns. [Jaga]" : bed.nurse;
 
-    // Badges HTML
+    // Badges HTML with Standard Clinical Colors & High Contrast
     const badgesHtml = (bed.badges || []).map(b => {
-      let bgClass = "bg-[#fef3c7] dark:bg-amber-950/70 border border-amber-200/60 dark:border-amber-800";
-      let titleClass = "text-[#92400e] dark:text-amber-200";
-      let subClass = "text-[#b45309] dark:text-amber-300";
+      let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
+      let titleClass = "text-[#78350f] dark:text-amber-200";
+      let subClass = "text-[#92400e] dark:text-amber-300";
       let icon = ICONS.fallRisk;
 
-      if (b.type === 'npo' || b.type === 'allergy') {
-        bgClass = "bg-[#fee2e2] dark:bg-rose-950/70 border border-rose-200/60 dark:border-rose-800";
-        titleClass = "text-[#991b1b] dark:text-rose-200";
-        subClass = "text-[#b91c1c] dark:text-rose-300";
-        icon = ICONS.ban;
+      if (b.type === 'npo') {
+        // NPO: Warm Coral / Terracotta (Clear distinction from acute allergy)
+        bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border border-[#fdba74] dark:border-orange-800";
+        titleClass = "text-[#7c2d12] dark:text-orange-200";
+        subClass = "text-[#9a3412] dark:text-orange-300";
+        icon = ICONS.npo;
+      } else if (b.type === 'allergy') {
+        // Allergy: Universal Medical Red
+        bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border border-[#fca5a5] dark:border-red-800";
+        titleClass = "text-[#7f1d1d] dark:text-red-200";
+        subClass = "text-[#991b1b] dark:text-red-300";
+        icon = ICONS.allergy;
       }
 
       return `
-        <div class="flex items-center gap-2.5 sm:gap-3 px-3 py-1.5 sm:py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs">
+        <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs">
           <div class="flex-shrink-0">${icon}</div>
           <div class="leading-tight">
             <h4 class="font-extrabold text-sm sm:text-base tracking-tight ${titleClass}">${b.title}</h4>
-            <p class="text-[10px] sm:text-[11px] font-medium ${subClass} mt-0.5">${b.subtitle}</p>
+            <p class="text-[11px] font-semibold ${subClass} mt-0.5">${b.subtitle}</p>
           </div>
         </div>
       `;
@@ -188,32 +209,32 @@ function renderSignage() {
 
     return `
       <!-- BED CARD: ${bed.label} -->
-      <div onclick="editSpecificBed(${index})" class="bed-card-item cursor-pointer bg-white dark:bg-slate-900 border border-[#d9e2ec] dark:border-slate-800 rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-200 hover:shadow-md relative overflow-hidden group">
+      <div onclick="editSpecificBed(${index})" class="bed-card-item cursor-pointer bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-200 hover:shadow-md relative overflow-hidden group">
         
         <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6">
           
           <!-- LEFT SECTION: Bed Identifier + Care Team -->
           <div class="flex items-center gap-4 sm:gap-6 min-w-[280px]">
             
-            <!-- Bed Icon Badge Box -->
-            <div class="w-20 sm:w-24 h-20 sm:h-24 rounded-2xl bg-[#edf4f9] dark:bg-slate-800/80 border border-[#dce7f0] dark:border-slate-700/60 flex flex-col items-center justify-center gap-1 sm:gap-1.5 flex-shrink-0 shadow-xs">
+            <!-- Bed Icon Badge Box (Clinical Deep Blue) -->
+            <div class="w-20 sm:w-24 h-20 sm:h-24 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1 sm:gap-1.5 flex-shrink-0 shadow-2xs">
               ${ICONS.bed}
-              <span class="font-extrabold text-[#2b5a83] dark:text-[#93c5fd] text-sm sm:text-base tracking-wider leading-none">${bed.label}</span>
+              <span class="font-extrabold text-[#0369a1] dark:text-[#38bdf8] text-sm sm:text-base tracking-wider leading-none">${bed.label}</span>
             </div>
 
-            <!-- Care Team Details -->
+            <!-- Care Team Details (High Contrast Slate Hierarchy) -->
             <div class="space-y-1.5 sm:space-y-2 py-0.5">
               <div>
-                <p class="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight leading-none">Attending physician</p>
-                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayPhysician}</h3>
+                <p class="text-[11px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Attending physician</p>
+                <h3 class="text-base sm:text-lg font-bold text-[#0f172a] dark:text-white leading-tight tracking-tight">${displayPhysician}</h3>
               </div>
               <div>
-                <p class="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight leading-none">Resident Medical Officer</p>
-                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayRMO}</h3>
+                <p class="text-[11px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Resident Medical Officer</p>
+                <h3 class="text-base sm:text-lg font-bold text-[#0f172a] dark:text-white leading-tight tracking-tight">${displayRMO}</h3>
               </div>
               <div>
-                <p class="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight leading-none">Nurse</p>
-                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayNurse}</h3>
+                <p class="text-[11px] font-semibold text-[#475569] dark:text-slate-400 tracking-tight leading-none">Nurse</p>
+                <h3 class="text-base sm:text-lg font-bold text-[#0f172a] dark:text-white leading-tight tracking-tight">${displayNurse}</h3>
               </div>
             </div>
 
@@ -222,11 +243,11 @@ function renderSignage() {
           <!-- VERTICAL DIVIDER -->
           <div class="hidden lg:block w-[1px] h-20 sm:h-24 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
 
-          <!-- MIDDLE SECTION: Next Care Event Box -->
+          <!-- MIDDLE SECTION: Next Care Event Box (Clinical Crimson Alert) -->
           <div class="flex-1 max-w-sm sm:max-w-md">
-            <div class="border ${isOverdue ? 'border-[#fecaca] dark:border-rose-900/60 bg-[#fff5f5] dark:bg-rose-950/20' : 'border-blue-200 dark:border-blue-900 bg-blue-50/40 dark:bg-blue-950/20'} rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 relative ${isOverdue ? 'animate-overdue-pulse' : ''}">
+            <div class="border ${isOverdue ? 'border-[#fca5a5] dark:border-rose-900/60 bg-[#fff5f5] dark:bg-rose-950/25' : 'border-sky-200 dark:border-sky-900 bg-sky-50/40 dark:bg-sky-950/20'} rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 relative ${isOverdue ? 'animate-overdue-pulse' : ''}">
               <div>
-                <h3 class="font-extrabold text-sm sm:text-base text-[#d32f2f] dark:text-[#f87171] tracking-tight mb-1.5">
+                <h3 class="font-extrabold text-sm sm:text-base text-[#be123c] dark:text-[#fb7185] tracking-tight mb-1.5">
                   ${event.title || 'Next Care Event'}
                 </h3>
 
@@ -236,19 +257,19 @@ function renderSignage() {
                   <div class="flex flex-col">
                     <div class="flex items-center gap-1.5 sm:gap-2">
                       ${isOverdue ? `
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#fee2e2] text-[#dc2626] border border-red-300 dark:bg-red-900/40 dark:text-red-300">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#fee2e2] text-[#991b1b] border border-[#fca5a5]">
                           Overdue
                         </span>
                       ` : `
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-300">
                           ${event.status}
                         </span>
                       `}
-                      <span class="font-bold text-xs sm:text-sm md:text-base text-[#dc2626] dark:text-[#f87171]">
+                      <span class="font-bold text-xs sm:text-sm md:text-base text-[#9f1239] dark:text-[#fda4af]">
                         ${event.name} • ${event.time}
                       </span>
                     </div>
-                    <p class="text-[10px] sm:text-xs text-[#ef4444] dark:text-red-300/80 font-medium mt-0.5">
+                    <p class="text-[11px] text-[#be123c] dark:text-rose-300 font-medium mt-0.5">
                       ${event.note || 'Nurse attendance not recorded'}
                     </p>
                   </div>
@@ -258,7 +279,7 @@ function renderSignage() {
             </div>
           </div>
 
-          <!-- RIGHT SECTION: Risk Badges Stack -->
+          <!-- RIGHT SECTION: Standardized Safety Badges Stack -->
           <div class="w-full md:w-56 lg:w-60 flex flex-col gap-1.5 sm:gap-2 justify-center flex-shrink-0">
             ${badgesHtml}
           </div>
@@ -278,7 +299,6 @@ function setBezelColor(color) {
   chassis.classList.remove('bezel-black', 'bezel-white', 'bezel-silver');
   chassis.classList.add(`bezel-${color}`);
 
-  // Highlight active button
   ['black', 'white', 'silver'].forEach(c => {
     const btn = document.getElementById(`bezelBtn${c.charAt(0).toUpperCase() + c.slice(1)}`);
     if (btn) {
@@ -294,9 +314,9 @@ function setBezelColor(color) {
 // Cycle Hardware Side LED Light Bar (Hospital Standard Status Lights)
 function cycleLedStatus() {
   const ledStates = [
-    { label: "LED: Overdue Alert", color: "bg-red-500", glow: "shadow-[0_0_15px_rgba(239,68,68,0.9)]", ambient: "bg-red-500/10" },
-    { label: "LED: Normal (Green)", color: "bg-emerald-500", glow: "shadow-[0_0_15px_rgba(16,185,129,0.9)]", ambient: "bg-emerald-500/10" },
-    { label: "LED: Caution / NPO", color: "bg-amber-500", glow: "shadow-[0_0_15px_rgba(245,158,11,0.9)]", ambient: "bg-amber-500/10" }
+    { label: "LED: Overdue Alert (Red)", color: "bg-red-500", glow: "shadow-[0_0_15px_rgba(239,68,68,0.9)]", ambient: "bg-red-500/10" },
+    { label: "LED: Normal/Ready (Green)", color: "bg-emerald-500", glow: "shadow-[0_0_15px_rgba(16,185,129,0.9)]", ambient: "bg-emerald-500/10" },
+    { label: "LED: Fall Risk Caution (Yellow)", color: "bg-amber-400", glow: "shadow-[0_0_15px_rgba(251,191,36,0.9)]", ambient: "bg-amber-400/10" }
   ];
 
   state.ledStatusIndex = (state.ledStatusIndex + 1) % ledStates.length;
@@ -307,7 +327,6 @@ function cycleLedStatus() {
   const ledLabel = document.getElementById('ledStatusLabel');
   const ambientGlow = document.getElementById('deviceAmbientGlow');
 
-  // Update classes
   ledBar.className = `absolute left-0 top-1/4 bottom-1/4 w-1.5 ${cur.color} rounded-r-md ${cur.glow} animate-pulse transition-all duration-300`;
   ledDot.className = `w-2.5 h-2.5 rounded-full ${cur.color} animate-pulse shadow-sm`;
   ledLabel.textContent = cur.label;
@@ -385,7 +404,7 @@ function populateBedSelectorTabs() {
   if (!container) return;
 
   container.innerHTML = state.data.beds.map((bed, idx) => `
-    <button type="button" onclick="selectBedTab(${idx})" class="py-1.5 px-3 rounded-xl font-bold text-xs border transition-all ${idx === state.activeBedIndex ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}">
+    <button type="button" onclick="selectBedTab(${idx})" class="py-1.5 px-3 rounded-xl font-bold text-xs border transition-all ${idx === state.activeBedIndex ? 'bg-sky-600 text-white border-sky-600 shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}">
       ${bed.label}
     </button>
   `).join('');

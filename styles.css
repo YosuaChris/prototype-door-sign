@@ -62,7 +62,7 @@ body {
   min-height: 0 !important;
   overflow: hidden !important;
   display: flex;
-  align-items: center;
+  align-items: stretch !important;
   justify-content: space-between;
   box-sizing: border-box;
   transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;

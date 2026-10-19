@@ -548,10 +548,26 @@ function renderThreeBedRow(bed, index) {
       <!-- DIVIDER -->
       <div class="hidden md:block w-[1.5px] self-stretch my-1.5 bg-slate-200 dark:bg-slate-800 flex-shrink-0"></div>
 
-      <!-- MIDDLE: Next Care Event + Visiting Status (Maximized Height, Stacked Vertically) -->
+      <!-- MIDDLE: Visiting Status (Top) + Next Care Event (Bottom / Last) -->
       <div class="self-stretch flex-1 min-w-[270px] sm:min-w-[320px] flex flex-col justify-between min-w-0 gap-2 sm:gap-2.5">
         
-        <!-- Next Care Event Box (Expanded to fill top area) -->
+        <!-- Visiting Status Strip (Placed at top of middle column) -->
+        ${visiting ? `
+          <div class="flex-shrink-0 flex items-center justify-between px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl ${visiting.stripClass} border-2 transition-all shadow-2xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="flex-shrink-0">${visiting.icon}</div>
+              <div class="flex items-center gap-1.5 min-w-0 truncate">
+                <span class="font-black text-xs sm:text-sm md:text-[14.5px] ${visiting.titleClass} truncate">${visiting.title}</span>
+                <span class="text-[11px] sm:text-xs md:text-[13px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
+              </div>
+            </div>
+            <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">
+              Visiting
+            </span>
+          </div>
+        ` : ''}
+
+        <!-- Next Care Event Box (Placed at bottom / last of middle column) -->
         <div class="flex-1 flex flex-col justify-center border-2 ${theme.boxClass} rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2 sm:py-2.5 transition-all duration-300 relative shadow-2xs min-h-0">
           <h3 class="font-black text-xs sm:text-sm ${theme.titleClass} tracking-tight mb-1 sm:mb-1.5 flex items-center gap-2 leading-none">
             <span>${event.title || 'Next Care Event'}</span>
@@ -576,22 +592,6 @@ function renderThreeBedRow(bed, index) {
             </div>
           </div>
         </div>
-
-        <!-- Visiting Status Strip (Expanded bar directly below Next Care Event) -->
-        ${visiting ? `
-          <div class="flex-shrink-0 flex items-center justify-between px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl ${visiting.stripClass} border-2 transition-all shadow-2xs">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="flex-shrink-0">${visiting.icon}</div>
-              <div class="flex items-center gap-1.5 min-w-0 truncate">
-                <span class="font-black text-xs sm:text-sm md:text-[14.5px] ${visiting.titleClass} truncate">${visiting.title}</span>
-                <span class="text-[11px] sm:text-xs md:text-[13px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
-              </div>
-            </div>
-            <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">
-              Visiting
-            </span>
-          </div>
-        ` : ''}
 
       </div>
 
@@ -697,8 +697,19 @@ function renderTwoBedSideBySide(bed, index) {
         </div>
       </div>
 
-      <!-- NEXT CARE EVENT (Prominent Card) -->
-      <div class="border-2 ${theme.boxClass} rounded-xl p-3 sm:p-3.5 shadow-2xs">
+      <!-- CLINICAL SAFETY ALERTS (Middle) -->
+      <div class="flex-1 flex flex-col justify-start space-y-1.5 min-h-0">
+        <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+          <span>Indikator Keselamatan Pasien</span>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          ${badgesHtml}
+        </div>
+      </div>
+
+      <!-- NEXT CARE EVENT (Placed at the very bottom / last) -->
+      <div class="border-2 ${theme.boxClass} rounded-xl p-3 sm:p-3.5 shadow-2xs mt-auto">
         <div class="flex items-center justify-between mb-1.5">
           <h3 class="font-black text-xs sm:text-[13px] ${theme.titleClass} tracking-tight flex items-center gap-1.5">
             <span>${event.title || 'Next Care Event'}</span>
@@ -718,17 +729,6 @@ function renderTwoBedSideBySide(bed, index) {
               ${event.note || 'Observation recorded'}
             </p>
           </div>
-        </div>
-      </div>
-
-      <!-- CLINICAL SAFETY ALERTS (Stacked at bottom) -->
-      <div class="flex-1 flex flex-col justify-end space-y-1.5 min-h-0">
-        <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-          <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-          <span>Indikator Keselamatan Pasien</span>
-        </div>
-        <div class="flex flex-col gap-1.5">
-          ${badgesHtml}
         </div>
       </div>
 
@@ -808,8 +808,24 @@ function renderTwoBedStacked(bed, index) {
 
       <div class="hidden md:block w-[1.5px] self-stretch my-2 bg-slate-200 dark:bg-slate-800 flex-shrink-0"></div>
 
-      <!-- MIDDLE: Next Care Event + Visiting Status -->
+      <!-- MIDDLE: Visiting Status (Top) + Next Care Event (Bottom / Last) -->
       <div class="self-stretch flex-1 min-w-[320px] flex flex-col justify-between gap-3 min-w-0">
+        
+        <!-- Visiting Status Strip (Top of middle column) -->
+        ${visiting ? `
+          <div class="flex-shrink-0 flex items-center justify-between px-4 py-2.5 rounded-xl ${visiting.stripClass} border-2 shadow-2xs">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="flex-shrink-0">${visiting.icon}</div>
+              <div class="flex items-center gap-2 min-w-0 truncate">
+                <span class="font-black text-sm ${visiting.titleClass} truncate">${visiting.title}</span>
+                <span class="text-xs ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">Visiting</span>
+          </div>
+        ` : ''}
+
+        <!-- Next Care Event (Bottom / Last of middle column) -->
         <div class="flex-1 flex flex-col justify-center border-2 ${theme.boxClass} rounded-2xl px-4 py-3 shadow-2xs min-h-0">
           <div class="flex items-center justify-between mb-1.5">
             <h3 class="font-black text-sm ${theme.titleClass} tracking-tight flex items-center gap-2">
@@ -827,18 +843,6 @@ function renderTwoBedStacked(bed, index) {
           </div>
         </div>
 
-        ${visiting ? `
-          <div class="flex-shrink-0 flex items-center justify-between px-4 py-2.5 rounded-xl ${visiting.stripClass} border-2 shadow-2xs">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="flex-shrink-0">${visiting.icon}</div>
-              <div class="flex items-center gap-2 min-w-0 truncate">
-                <span class="font-black text-sm ${visiting.titleClass} truncate">${visiting.title}</span>
-                <span class="text-xs ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
-              </div>
-            </div>
-            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">Visiting</span>
-          </div>
-        ` : ''}
       </div>
 
       <!-- RIGHT: Clinical Safety Alerts -->
@@ -1071,28 +1075,10 @@ function renderVipRoom(bed, index) {
 
     </div>
 
-    <!-- RIGHT PANEL: Clinical Timeline & Patient Safety Precautions (col-span-6) -->
+    <!-- RIGHT PANEL: Patient Safety Precautions (Top) & Clinical Care Timeline (Bottom / Last) (col-span-6) -->
     <div onclick="editSpecificBed(${index})" class="col-span-6 flex flex-col justify-between gap-2.5 sm:gap-3 h-full overflow-hidden cursor-pointer group">
       
-      <!-- TODAY'S CLINICAL CARE TIMELINE -->
-      <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
-        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
-          <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span>Jadwal & Timeline Pelayanan Medis Hari Ini</span>
-          </div>
-          <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
-            EWS Terkoneksi
-          </span>
-        </div>
-
-        <!-- 3 Sequential Care Items -->
-        <div class="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-between min-h-0">
-          ${timelineHtml}
-        </div>
-      </div>
-
-      <!-- PATIENT SAFETY PRECAUTIONS (JCI / KARS) -->
+      <!-- PATIENT SAFETY PRECAUTIONS (JCI / KARS) - Positioned at Top -->
       <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
           <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -1107,6 +1093,24 @@ function renderVipRoom(bed, index) {
         <!-- Safety Badges Stack -->
         <div class="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-between min-h-0">
           ${badgesHtml}
+        </div>
+      </div>
+
+      <!-- TODAY'S CLINICAL CARE TIMELINE - Positioned at Bottom / Last -->
+      <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
+          <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Jadwal & Timeline Pelayanan Medis Hari Ini</span>
+          </div>
+          <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+            EWS Terkoneksi
+          </span>
+        </div>
+
+        <!-- 3 Sequential Care Items -->
+        <div class="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-between min-h-0">
+          ${timelineHtml}
         </div>
       </div>
 

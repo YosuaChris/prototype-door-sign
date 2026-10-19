@@ -1,5 +1,5 @@
 /**
- * Hospital Smart Door Sign Application - Adaptive Presentation Mode
+ * Hospital Smart Door Sign Application - 10" Hardware Frame Showcase
  */
 
 // Default data matching the user's reference image exactly
@@ -105,20 +105,22 @@ let state = {
   data: JSON.parse(localStorage.getItem('hospital_door_sign_data')) || JSON.parse(JSON.stringify(DEFAULT_ROOM_DATA)),
   activeBedIndex: 0,
   privacyMode: false,
-  nightMode: false
+  nightMode: false,
+  bezelColor: 'black',
+  ledStatusIndex: 0 // 0: Red (Alert), 1: Green (Normal), 2: Amber (Caution)
 };
 
-// SVG Icons Library (Full scale crisp vector graphics)
+// SVG Icons Library (Sharp, crisp vector graphics)
 const ICONS = {
   bed: `
-    <svg class="w-12 h-12 text-[#2f597e] dark:text-[#7dd3fc] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-10 h-10 sm:w-11 sm:h-11 text-[#2f597e] dark:text-[#7dd3fc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 19h20M2 17v2M22 17v2" />
       <path d="M2 8v9h20V12a3 3 0 0 0-3-3h-9" />
       <path d="M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
     </svg>
   `,
   calendar: `
-    <svg class="w-7 h-7 text-[#dc2626] dark:text-[#f87171] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#dc2626] dark:text-[#f87171] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -129,21 +131,21 @@ const ICONS = {
     </svg>
   `,
   fallRisk: `
-    <svg class="w-7 h-7 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
       <line x1="12" y1="9" x2="12" y2="13"></line>
       <line x1="12" y1="17" x2="12.01" y2="17"></line>
     </svg>
   `,
   ban: `
-    <svg class="w-7 h-7 text-[#b91c1c] dark:text-[#fecdd3] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-6 h-6 text-[#b91c1c] dark:text-[#fecdd3] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   `
 };
 
-// Render Signage Board
+// Render Signage Board inside the 10" Screen
 function renderSignage() {
   const container = document.getElementById('bedCardsContainer');
   if (!container) return;
@@ -174,11 +176,11 @@ function renderSignage() {
       }
 
       return `
-        <div class="flex items-center gap-3.5 px-4 py-2.5 rounded-2xl ${bgClass} transition-all duration-200 shadow-xs">
+        <div class="flex items-center gap-2.5 sm:gap-3 px-3 py-1.5 sm:py-2 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs">
           <div class="flex-shrink-0">${icon}</div>
           <div class="leading-tight">
-            <h4 class="font-extrabold text-[17px] tracking-tight ${titleClass}">${b.title}</h4>
-            <p class="text-xs font-medium ${subClass} mt-0.5">${b.subtitle}</p>
+            <h4 class="font-extrabold text-sm sm:text-base tracking-tight ${titleClass}">${b.title}</h4>
+            <p class="text-[10px] sm:text-[11px] font-medium ${subClass} mt-0.5">${b.subtitle}</p>
           </div>
         </div>
       `;
@@ -186,67 +188,67 @@ function renderSignage() {
 
     return `
       <!-- BED CARD: ${bed.label} -->
-      <div onclick="editSpecificBed(${index})" class="bed-card-item cursor-pointer bg-white dark:bg-slate-900 border border-[#d9e2ec] dark:border-slate-800 rounded-3xl p-4 sm:p-5 md:p-6 transition-all duration-200 hover:shadow-lg relative overflow-hidden group">
+      <div onclick="editSpecificBed(${index})" class="bed-card-item cursor-pointer bg-white dark:bg-slate-900 border border-[#d9e2ec] dark:border-slate-800 rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-200 hover:shadow-md relative overflow-hidden group">
         
-        <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 md:gap-8">
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6">
           
           <!-- LEFT SECTION: Bed Identifier + Care Team -->
-          <div class="flex items-center gap-6 sm:gap-8 min-w-[340px]">
+          <div class="flex items-center gap-4 sm:gap-6 min-w-[280px]">
             
             <!-- Bed Icon Badge Box -->
-            <div class="w-28 sm:w-32 h-28 sm:h-32 rounded-2xl bg-[#edf4f9] dark:bg-slate-800/80 border border-[#dce7f0] dark:border-slate-700/60 flex flex-col items-center justify-center gap-2 flex-shrink-0 shadow-xs">
+            <div class="w-20 sm:w-24 h-20 sm:h-24 rounded-2xl bg-[#edf4f9] dark:bg-slate-800/80 border border-[#dce7f0] dark:border-slate-700/60 flex flex-col items-center justify-center gap-1 sm:gap-1.5 flex-shrink-0 shadow-xs">
               ${ICONS.bed}
-              <span class="font-extrabold text-[#2b5a83] dark:text-[#93c5fd] text-base sm:text-lg tracking-wider">${bed.label}</span>
+              <span class="font-extrabold text-[#2b5a83] dark:text-[#93c5fd] text-sm sm:text-base tracking-wider leading-none">${bed.label}</span>
             </div>
 
             <!-- Care Team Details -->
-            <div class="space-y-3 py-1">
+            <div class="space-y-1.5 sm:space-y-2 py-0.5">
               <div>
-                <p class="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight">Attending physician</p>
-                <h3 class="text-xl sm:text-[22px] font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayPhysician}</h3>
+                <p class="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight leading-none">Attending physician</p>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayPhysician}</h3>
               </div>
               <div>
-                <p class="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight">Resident Medical Officer</p>
-                <h3 class="text-xl sm:text-[22px] font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayRMO}</h3>
+                <p class="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight leading-none">Resident Medical Officer</p>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayRMO}</h3>
               </div>
               <div>
-                <p class="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight">Nurse</p>
-                <h3 class="text-xl sm:text-[22px] font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayNurse}</h3>
+                <p class="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-tight leading-none">Nurse</p>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">${displayNurse}</h3>
               </div>
             </div>
 
           </div>
 
           <!-- VERTICAL DIVIDER -->
-          <div class="hidden xl:block w-[1px] h-32 bg-slate-200 dark:bg-slate-800 self-center"></div>
+          <div class="hidden lg:block w-[1px] h-20 sm:h-24 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
 
           <!-- MIDDLE SECTION: Next Care Event Box -->
-          <div class="flex-1 max-w-xl">
-            <div class="border ${isOverdue ? 'border-[#fecaca] dark:border-rose-900/60 bg-[#fff5f5] dark:bg-rose-950/20' : 'border-blue-200 dark:border-blue-900 bg-blue-50/40 dark:bg-blue-950/20'} rounded-2xl p-5 md:p-6 transition-all duration-300 relative ${isOverdue ? 'animate-overdue-pulse' : ''}">
-              <div class="text-center sm:text-left">
-                <h3 class="font-extrabold text-lg sm:text-xl text-[#d32f2f] dark:text-[#f87171] tracking-tight mb-2.5">
+          <div class="flex-1 max-w-sm sm:max-w-md">
+            <div class="border ${isOverdue ? 'border-[#fecaca] dark:border-rose-900/60 bg-[#fff5f5] dark:bg-rose-950/20' : 'border-blue-200 dark:border-blue-900 bg-blue-50/40 dark:bg-blue-950/20'} rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 relative ${isOverdue ? 'animate-overdue-pulse' : ''}">
+              <div>
+                <h3 class="font-extrabold text-sm sm:text-base text-[#d32f2f] dark:text-[#f87171] tracking-tight mb-1.5">
                   ${event.title || 'Next Care Event'}
                 </h3>
 
-                <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-3">
                   ${ICONS.calendar}
 
                   <div class="flex flex-col">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5 sm:gap-2">
                       ${isOverdue ? `
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#fee2e2] text-[#dc2626] border border-red-300 dark:bg-red-900/40 dark:text-red-300">
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#fee2e2] text-[#dc2626] border border-red-300 dark:bg-red-900/40 dark:text-red-300">
                           Overdue
                         </span>
                       ` : `
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 border border-blue-300 dark:bg-blue-900/40 dark:text-blue-300">
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
                           ${event.status}
                         </span>
                       `}
-                      <span class="font-bold text-base sm:text-lg text-[#dc2626] dark:text-[#f87171]">
+                      <span class="font-bold text-xs sm:text-sm md:text-base text-[#dc2626] dark:text-[#f87171]">
                         ${event.name} • ${event.time}
                       </span>
                     </div>
-                    <p class="text-xs text-[#ef4444] dark:text-red-300/80 font-medium mt-1">
+                    <p class="text-[10px] sm:text-xs text-[#ef4444] dark:text-red-300/80 font-medium mt-0.5">
                       ${event.note || 'Nurse attendance not recorded'}
                     </p>
                   </div>
@@ -257,7 +259,7 @@ function renderSignage() {
           </div>
 
           <!-- RIGHT SECTION: Risk Badges Stack -->
-          <div class="w-full lg:w-64 xl:w-72 flex flex-col gap-2.5 justify-center">
+          <div class="w-full md:w-56 lg:w-60 flex flex-col gap-1.5 sm:gap-2 justify-center flex-shrink-0">
             ${badgesHtml}
           </div>
 
@@ -266,6 +268,61 @@ function renderSignage() {
       </div>
     `;
   }).join('');
+}
+
+// Set Frame Bezel Color (Black / White / Silver)
+function setBezelColor(color) {
+  state.bezelColor = color;
+  const chassis = document.getElementById('tabletChassis');
+  
+  chassis.classList.remove('bezel-black', 'bezel-white', 'bezel-silver');
+  chassis.classList.add(`bezel-${color}`);
+
+  // Highlight active button
+  ['black', 'white', 'silver'].forEach(c => {
+    const btn = document.getElementById(`bezelBtn${c.charAt(0).toUpperCase() + c.slice(1)}`);
+    if (btn) {
+      if (c === color) {
+        btn.classList.add('ring-2', 'ring-blue-400', 'scale-110');
+      } else {
+        btn.classList.remove('ring-2', 'ring-blue-400', 'scale-110');
+      }
+    }
+  });
+}
+
+// Cycle Hardware Side LED Light Bar (Hospital Standard Status Lights)
+function cycleLedStatus() {
+  const ledStates = [
+    { label: "LED: Overdue Alert", color: "bg-red-500", glow: "shadow-[0_0_15px_rgba(239,68,68,0.9)]", ambient: "bg-red-500/10" },
+    { label: "LED: Normal (Green)", color: "bg-emerald-500", glow: "shadow-[0_0_15px_rgba(16,185,129,0.9)]", ambient: "bg-emerald-500/10" },
+    { label: "LED: Caution / NPO", color: "bg-amber-500", glow: "shadow-[0_0_15px_rgba(245,158,11,0.9)]", ambient: "bg-amber-500/10" }
+  ];
+
+  state.ledStatusIndex = (state.ledStatusIndex + 1) % ledStates.length;
+  const cur = ledStates[state.ledStatusIndex];
+
+  const ledBar = document.getElementById('tabletLedBar');
+  const ledDot = document.getElementById('ledStatusDot');
+  const ledLabel = document.getElementById('ledStatusLabel');
+  const ambientGlow = document.getElementById('deviceAmbientGlow');
+
+  // Update classes
+  ledBar.className = `absolute left-0 top-1/4 bottom-1/4 w-1.5 ${cur.color} rounded-r-md ${cur.glow} animate-pulse transition-all duration-300`;
+  ledDot.className = `w-2.5 h-2.5 rounded-full ${cur.color} animate-pulse shadow-sm`;
+  ledLabel.textContent = cur.label;
+  ambientGlow.className = `absolute -inset-3 ${cur.ambient} rounded-[44px] filter blur-xl opacity-70 transition-all duration-500`;
+}
+
+// Toggle Night Mode inside the 10" tablet display
+function toggleNightModeInside() {
+  state.nightMode = !state.nightMode;
+  const screen = document.getElementById('screenViewport');
+  if (state.nightMode) {
+    screen.classList.add('dark');
+  } else {
+    screen.classList.remove('dark');
+  }
 }
 
 // Live Digital Clock
@@ -280,53 +337,16 @@ function updateClock() {
   const seconds = String(now.getSeconds()).padStart(2, '0');
   timeElem.textContent = `${hours}:${minutes}:${seconds}`;
 
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
   dateElem.textContent = now.toLocaleDateString('id-ID', options);
 }
 
-// Toggle Fullscreen
+// Fullscreen Toggle
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(err => {
-      console.warn("Fullscreen request error:", err);
-    });
+    document.documentElement.requestFullscreen().catch(err => console.warn(err));
   } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
-  }
-}
-
-// Toggle Privacy Mode
-function togglePrivacyMode() {
-  state.privacyMode = !state.privacyMode;
-  const btn = document.getElementById('privacyModeBtn');
-  const label = document.getElementById('privacyModeLabel');
-  
-  if (state.privacyMode) {
-    btn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
-    btn.classList.remove('bg-slate-100', 'text-slate-700');
-    label.textContent = "Privasi Aktif";
-  } else {
-    btn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
-    btn.classList.add('bg-slate-100', 'text-slate-700');
-    label.textContent = "Privasi";
-  }
-  renderSignage();
-}
-
-// Toggle Night Mode
-function toggleNightMode() {
-  state.nightMode = !state.nightMode;
-  const html = document.documentElement;
-  const label = document.getElementById('nightModeLabel');
-  
-  if (state.nightMode) {
-    html.classList.add('dark');
-    label.textContent = "Mode Siang";
-  } else {
-    html.classList.remove('dark');
-    label.textContent = "Mode Malam";
+    if (document.exitFullscreen) document.exitFullscreen();
   }
 }
 
@@ -365,7 +385,7 @@ function populateBedSelectorTabs() {
   if (!container) return;
 
   container.innerHTML = state.data.beds.map((bed, idx) => `
-    <button type="button" onclick="selectBedTab(${idx})" class="py-2 px-3 rounded-xl font-bold text-xs border transition-all ${idx === state.activeBedIndex ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}">
+    <button type="button" onclick="selectBedTab(${idx})" class="py-1.5 px-3 rounded-xl font-bold text-xs border transition-all ${idx === state.activeBedIndex ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}">
       ${bed.label}
     </button>
   `).join('');
@@ -458,6 +478,7 @@ function saveBedChanges(event) {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+  setBezelColor('black');
   renderSignage();
   updateClock();
   setInterval(updateClock, 1000);

@@ -1,27 +1,10 @@
-/* Modern Hospital Door Sign Custom Stylesheet - Adaptive Presentation Mode */
+/* Modern Hospital Door Sign Custom Stylesheet - 10" Device Frame Presentation */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-color: #f1f5f9;
-  --card-bg: #ffffff;
-  --bed-indicator-bg: #edf4f9;
-  --bed-indicator-text: #2f597e;
-  --text-primary: #0f172a;
-  --text-muted: #64748b;
-  --divider-color: #e2e8f0;
+  --bg-color: #0f172a;
 }
 
-.dark {
-  --bg-color: #0b0f17;
-  --card-bg: #111827;
-  --bed-indicator-bg: #1e293b;
-  --bed-indicator-text: #7dd3fc;
-  --text-primary: #f8fafc;
-  --text-muted: #94a3b8;
-  --divider-color: #334155;
-}
-
-/* Base Body Styles */
 body {
   font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -34,22 +17,41 @@ body {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.25);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
   }
 }
 
 .animate-overdue-pulse {
-  animation: softPulse 2.8s infinite ease-in-out;
+  animation: softPulse 2.5s infinite ease-in-out;
 }
 
 /* Bed card item hover transitions */
 .bed-card-item {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 .bed-card-item:hover {
   border-color: #93c5fd;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.08);
+  box-shadow: 0 8px 20px -4px rgba(59, 130, 246, 0.12);
+}
+
+/* Tablet Frame Bezel Themes */
+.bezel-black {
+  background-color: #18181b !important;
+  border-color: #27272a !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+.bezel-white {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+.bezel-silver {
+  background-color: #d1d5db !important;
+  border-color: #9ca3af !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 3px rgba(255, 255, 255, 0.6) !important;
 }
 
 /* Smooth modal scrollbar */

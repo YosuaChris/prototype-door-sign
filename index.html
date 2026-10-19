@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospital Smart Door Sign - Presentation Display</title>
+  <title>Hospital Smart Door Sign - 10" Device Showcase</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Inter & Plus Jakarta Sans Font -->
@@ -40,179 +40,227 @@
     }
   </script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-100 transition-colors duration-300">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white antialiased transition-colors duration-300">
 
-  <!-- TOP APP BAR & CONTROLS (Ideal for laptop presentation) -->
-  <header id="controlBar" class="bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-sm z-30 sticky top-0">
-    <div class="flex items-center space-x-3.5">
-      <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+  <!-- PRESENTATION TOP TOOLBAR -->
+  <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-40">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
       </div>
       <div>
-        <h1 class="text-base font-bold text-slate-900 dark:text-white leading-tight flex items-center gap-2">
-          <span>Smart Door Sign System</span>
-          <span class="text-[11px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 px-2 py-0.5 rounded-full uppercase tracking-wider">Live Demo</span>
+        <h1 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>Smart Door Sign Prototype</span>
+          <span class="text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-0.5 rounded-full uppercase tracking-wider">Mockup Layar 10.1" (16:10)</span>
         </h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400">Electronic Bedside & Door Information Display</p>
+        <p class="text-[11px] text-slate-400">Mode Presentasi Perangkat Keras Wall-Mounted Tablet</p>
       </div>
     </div>
 
-    <!-- Quick Presentation Actions -->
-    <div class="flex items-center gap-2.5 flex-wrap">
+    <!-- Presentation Controls -->
+    <div class="flex items-center gap-2 flex-wrap text-xs">
       <!-- Edit Data Button -->
-      <button onclick="openEditorModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800 transition shadow-xs">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
+      <button onclick="openEditorModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-500 transition shadow-sm">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
         <span>Kelola Data Bed</span>
       </button>
 
-      <!-- Toggle Night Mode -->
-      <button onclick="toggleNightMode()" id="nightModeBtn" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
-        <span id="nightModeLabel">Mode Malam</span>
+      <!-- Frame Bezel Color Selector -->
+      <div class="hidden sm:flex items-center gap-1 bg-slate-800/90 border border-slate-700 p-1 rounded-xl">
+        <span class="text-[10px] text-slate-400 px-2 font-medium">Warna Frame:</span>
+        <button onclick="setBezelColor('black')" id="bezelBtnBlack" class="w-5 h-5 rounded-full bg-slate-900 border-2 border-blue-500 shadow-xs" title="Matte Obsidian Black"></button>
+        <button onclick="setBezelColor('white')" id="bezelBtnWhite" class="w-5 h-5 rounded-full bg-white border border-slate-400 shadow-xs" title="Medical Clean White"></button>
+        <button onclick="setBezelColor('silver')" id="bezelBtnSilver" class="w-5 h-5 rounded-full bg-slate-300 border border-slate-400 shadow-xs" title="Brushed Aluminum Silver"></button>
+      </div>
+
+      <!-- Side Status LED Bar Toggle -->
+      <button onclick="cycleLedStatus()" id="ledToggleBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition" title="Ganti status lampu LED samping tablet">
+        <span id="ledStatusDot" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-sm shadow-red-500/50"></span>
+        <span id="ledStatusLabel">LED: Overdue Alert</span>
       </button>
 
-      <!-- Toggle Privacy Mode -->
-      <button onclick="togglePrivacyMode()" id="privacyModeBtn" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition" title="Sembunyikan detail medis">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
-        <span id="privacyModeLabel">Privasi</span>
+      <!-- Toggle Mode Malam di dalam Layar -->
+      <button onclick="toggleNightModeInside()" class="px-2.5 py-1.5 font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition" title="Simulasi Mode Malam Tablet">
+        Mode Malam
       </button>
 
-      <!-- Fullscreen Button -->
-      <button onclick="toggleFullscreen()" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-800 text-white hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 transition shadow-xs">
+      <!-- Toggle Fullscreen -->
+      <button onclick="toggleFullscreen()" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 transition" title="Layar Penuh (F11)">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/></svg>
-        <span>Layar Penuh (F11)</span>
       </button>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER (Adaptif untuk laptop, tablet, dan proyektor) -->
-  <main class="flex-1 w-full max-w-[1440px] mx-auto p-4 sm:p-6 md:p-8 flex flex-col justify-center">
+  <!-- PRESENTATION STAGE / WALL CANVAS -->
+  <main class="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 overflow-y-auto">
 
-    <!-- ROOM HEADER BAR -->
-    <div id="roomHeaderBar" class="mb-5 flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 rounded-2xl px-6 py-4 border border-slate-200/90 dark:border-slate-800 shadow-sm backdrop-blur">
-      <div class="flex items-center gap-4">
-        <div class="bg-blue-600 text-white px-4 py-2 rounded-xl font-extrabold text-base sm:text-lg tracking-wider flex items-center gap-2 shadow-xs">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.75a.75.75 0 00-.75-.75h-10.5a.75.75 0 00-.75.75V21h4.5z"/>
-          </svg>
-          <span id="roomNumber">ROOM 308</span>
-        </div>
-        <div>
-          <span id="wardName" class="font-bold text-slate-800 dark:text-slate-100 text-base sm:text-lg">BANGSAL DAHLIA (RAWAT INAP KELAS I)</span>
-          <span class="hidden md:inline text-xs text-emerald-600 dark:text-emerald-400 font-semibold ml-2">● 3 Bed Terisi Penuh</span>
-        </div>
-      </div>
-
-      <!-- Live Clock & Date -->
-      <div class="flex items-center gap-4 text-right">
-        <div class="hidden sm:block">
-          <div id="currentDate" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Senin, 19 Oktober 2026</div>
-          <div class="text-[11px] text-slate-400 dark:text-slate-500">St. Elisabeth Medical Center</div>
-        </div>
-        <div id="currentTime" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-blue-900 dark:text-blue-300 font-mono bg-blue-50/70 dark:bg-blue-950/50 px-3.5 py-1 rounded-xl border border-blue-100 dark:border-blue-900 shadow-2xs">
-          14:35:10
-        </div>
-      </div>
-    </div>
-
-    <!-- THE REPLICA SIGNAGE BOARD (Identik dengan Gambar Referensi) -->
-    <div id="signageBoard" class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-3xl p-4 sm:p-6 md:p-7 shadow-xl relative transition-all duration-300">
+    <!-- 10.1 INCH PHYSICAL DEVICE MOCKUP CONTAINER -->
+    <div class="relative w-full max-w-[1140px] my-auto transition-all duration-300">
       
-      <!-- Bed Cards Stack -->
-      <div id="bedCardsContainer" class="flex flex-col gap-5 sm:gap-6">
-        <!-- Rendered dynamically by JavaScript -->
+      <!-- WALL SHADOW & AMBIENT GLOW -->
+      <div id="deviceAmbientGlow" class="absolute -inset-3 bg-red-500/10 rounded-[44px] filter blur-xl opacity-70 transition-all duration-500"></div>
+
+      <!-- PHYSICAL TABLET CHASSIS (Bezel Body) -->
+      <div id="tabletChassis" class="relative bg-[#18181b] border-4 border-[#27272a] rounded-[36px] sm:rounded-[42px] p-4 sm:p-6 md:p-7 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] transition-all duration-300">
+        
+        <!-- SIDE HARDWARE LED LIGHT BAR (Standard on Hospital Door Tablets e.g. Philips/Crestron/Qbic) -->
+        <div id="tabletLedBar" class="absolute left-0 top-1/4 bottom-1/4 w-1.5 bg-red-500 rounded-r-md shadow-[0_0_15px_rgba(239,68,68,0.9)] animate-pulse transition-all duration-300" title="Side Status Light Bar"></div>
+
+        <!-- FRONT HARDWARE SENSOR & CAMERA PINHOLE -->
+        <div class="absolute top-2.5 sm:top-3.5 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-60">
+          <div class="w-1.5 h-1.5 rounded-full bg-black border border-slate-700" title="Ambient Light Sensor"></div>
+          <div class="w-2 h-2 rounded-full bg-slate-900 border border-slate-700" title="Camera / Proximity Sensor"></div>
+        </div>
+
+        <!-- 10" ACTIVE SCREEN GLASS (Aspect Ratio 16:10 standard for 10.1" displays) -->
+        <div id="screenViewport" class="relative w-full bg-slate-100 text-slate-800 rounded-2xl md:rounded-[22px] overflow-hidden border border-slate-300/80 shadow-inner flex flex-col transition-colors duration-300 select-none">
+          
+          <!-- SLIM SCREEN HEADER INSIDE 10" TABLET -->
+          <div class="flex-shrink-0 flex items-center justify-between bg-white dark:bg-slate-900 px-4 py-2 border-b border-slate-200/90 dark:border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="bg-blue-600 text-white px-3 py-1 rounded-lg font-extrabold text-xs sm:text-sm tracking-wider flex items-center gap-1.5 shadow-2xs">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.75a.75.75 0 00-.75-.75h-10.5a.75.75 0 00-.75.75V21h4.5z"/>
+                </svg>
+                <span id="roomNumber">ROOM 308</span>
+              </div>
+              <div>
+                <span id="wardName" class="font-bold text-slate-800 dark:text-slate-100 text-xs sm:text-sm">BANGSAL DAHLIA (RAWAT INAP KELAS I)</span>
+                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold ml-2">● 3 Bed Active</span>
+              </div>
+            </div>
+
+            <!-- Live Clock & Date -->
+            <div class="flex items-center gap-3">
+              <div class="hidden sm:block text-right">
+                <div id="currentDate" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Senin, 19 Okt 2026</div>
+                <div class="text-[9px] text-slate-400 dark:text-slate-500">St. Elisabeth Med. Ctr.</div>
+              </div>
+              <div id="currentTime" class="text-sm sm:text-base font-extrabold tracking-tight text-blue-900 dark:text-blue-300 font-mono bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-lg border border-blue-100 dark:border-blue-900">
+                14:35:10
+              </div>
+            </div>
+          </div>
+
+          <!-- THE 3 BED CARDS (Matches reference screenshot with precision) -->
+          <div class="p-3 sm:p-3.5 flex-1 flex flex-col justify-between">
+            <div id="signageBoard" class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-2.5 sm:p-3 shadow-xs">
+              
+              <!-- 3 Stacked Bed Cards Container -->
+              <div id="bedCardsContainer" class="flex flex-col gap-2.5 sm:gap-3">
+                <!-- Dynamically populated via app.js -->
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SUBTLE GLASS REFLECTION ACCENT -->
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-white/[0.08]"></div>
+
+        </div>
+
+        <!-- TABLET BOTTOM EMBOSSED BRANDING -->
+        <div class="mt-2 sm:mt-2.5 flex items-center justify-between px-2 text-[10px] text-slate-500 dark:text-slate-500 tracking-wider font-mono">
+          <span>HOSPITAL SIGNAGE DISPLAY 10.1" POE</span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>SYSTEM ACTIVE</span>
+          </span>
+        </div>
+
       </div>
 
     </div>
+
+    <!-- PRESENTATION CAPTION & SHORTCUTS -->
+    <div class="text-center mt-5 text-xs text-slate-400">
+      <p>💡 <strong class="text-slate-200">Tips Presentasi:</strong> Klik salah satu kartu bed di dalam layar tablet untuk mendemokan modal pengeditan data secara langsung.</p>
+    </div>
+
   </main>
 
-  <!-- FOOTER -->
-  <footer class="py-4 text-center text-xs text-slate-400 dark:text-slate-600">
-    Digital Door Signage Kiosk • Klik kartu bed manapun untuk membuka editor interaktif.
-  </footer>
-
   <!-- MODAL / DRAWER: EDIT DATA BED -->
-  <div id="editorModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-200" id="modalCard">
+  <div id="editorModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-200" id="modalCard">
       
       <!-- Modal Header -->
-      <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+      <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           </div>
           <div>
-            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Kelola Informasi Bed & Care Event</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Pilih bed untuk mengedit dokter, perawat, jadwal, dan label risiko</p>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Kelola Informasi Bed & Care Event</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pilih bed untuk mengedit dokter, perawat, dan jadwal tindakan</p>
           </div>
         </div>
-        <button onclick="closeEditorModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button onclick="closeEditorModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
       <!-- Modal Body (Scrollable Form) -->
-      <div class="p-6 overflow-y-auto space-y-6 flex-1">
+      <div class="p-5 overflow-y-auto space-y-4 flex-1 text-xs">
         
         <!-- Bed Selector Tabs -->
         <div>
-          <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2">Pilih Bed yang Diperbarui</label>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Bed yang Diperbarui</label>
           <div class="grid grid-cols-3 gap-2" id="bedSelectorTabs">
             <!-- Populated via JS -->
           </div>
         </div>
 
-        <form id="bedEditForm" onsubmit="saveBedChanges(event)" class="space-y-5">
+        <form id="bedEditForm" onsubmit="saveBedChanges(event)" class="space-y-4">
           <!-- Room Information -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nomor Kamar</label>
-              <input type="text" id="inputRoomNumber" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">Nomor Kamar</label>
+              <input type="text" id="inputRoomNumber" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-blue-500">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Bangsal / Ward</label>
-              <input type="text" id="inputWardName" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Bangsal</label>
+              <input type="text" id="inputWardName" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-blue-500">
             </div>
           </div>
 
           <!-- Care Team -->
-          <div class="border-t border-slate-100 dark:border-slate-800 pt-4">
-            <h3 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-3">Tim Medis (Care Team)</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="border-t border-slate-100 dark:border-slate-800 pt-3">
+            <h3 class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">Tim Medis (Care Team)</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Attending Physician (DPJP)</label>
-                <input type="text" id="inputPhysician" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Attending Physician (DPJP)</label>
+                <input type="text" id="inputPhysician" required class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
               </div>
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Resident Medical Officer</label>
-                <input type="text" id="inputRmo" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Resident Medical Officer</label>
+                <input type="text" id="inputRmo" required class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
               </div>
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Nurse (Perawat Jaga)</label>
-                <input type="text" id="inputNurse" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nurse (Perawat Jaga)</label>
+                <input type="text" id="inputNurse" required class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
               </div>
             </div>
           </div>
 
           <!-- Next Care Event -->
-          <div class="border-t border-slate-100 dark:border-slate-800 pt-4">
-            <h3 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-3">Next Care Event</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="border-t border-slate-100 dark:border-slate-800 pt-3">
+            <h3 class="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-2">Next Care Event</h3>
+            <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Nama Tindakan / Prosedur</label>
-                <input type="text" id="inputEventName" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nama Tindakan</label>
+                <input type="text" id="inputEventName" required class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
               </div>
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Waktu Pelaksanaan (Jam)</label>
-                <input type="text" id="inputEventTime" required class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Waktu (Jam)</label>
+                <input type="text" id="inputEventTime" required class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
               </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div class="grid grid-cols-2 gap-2 mt-2">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Status Keterlambatan</label>
-                <select id="inputEventStatus" class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Status Tindakan</label>
+                <select id="inputEventStatus" class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
                   <option value="Overdue">Overdue (Terlewat / Perlu Tindakan Segera)</option>
                   <option value="Scheduled">Scheduled (Sesuai Jadwal)</option>
                   <option value="In Progress">In Progress (Sedang Berjalan)</option>
@@ -220,48 +268,40 @@
                 </select>
               </div>
               <div>
-                <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Catatan Keterangan Tambahan</label>
-                <input type="text" id="inputEventNote" class="w-full text-sm px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Catatan Kehadiran</label>
+                <input type="text" id="inputEventNote" class="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
               </div>
             </div>
           </div>
 
           <!-- Badges -->
-          <div class="border-t border-slate-100 dark:border-slate-800 pt-4">
-            <h3 class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">Kewaspadaan / Clinical Safety Badges</h3>
-            <div class="space-y-3">
-              <div class="flex items-start gap-3 p-3 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40">
-                <input type="checkbox" id="checkFallRisk" class="mt-1 w-4 h-4 text-amber-600 rounded">
-                <div class="flex-1">
-                  <label for="checkFallRisk" class="font-bold text-sm text-amber-900 dark:text-amber-200 cursor-pointer">Fall Risk (Risiko Jatuh)</label>
-                  <input type="text" id="inputFallRiskNote" class="mt-1 w-full text-xs px-2.5 py-1.5 rounded-lg border border-amber-300 dark:border-amber-800 bg-white dark:bg-slate-800 text-amber-900 dark:text-amber-200 outline-none">
-                </div>
+          <div class="border-t border-slate-100 dark:border-slate-800 pt-3">
+            <h3 class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">Kewaspadaan / Clinical Safety Badges</h3>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5 p-2 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200">
+                <input type="checkbox" id="checkFallRisk" class="rounded text-amber-600">
+                <label for="checkFallRisk" class="font-bold text-amber-900 dark:text-amber-200 text-xs">Fall Risk</label>
+                <input type="text" id="inputFallRiskNote" class="flex-1 text-[11px] px-2 py-1 rounded-lg border border-amber-300 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
               </div>
-
-              <div class="flex items-start gap-3 p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40">
-                <input type="checkbox" id="checkNPO" class="mt-1 w-4 h-4 text-rose-600 rounded">
-                <div class="flex-1">
-                  <label for="checkNPO" class="font-bold text-sm text-rose-900 dark:text-rose-200 cursor-pointer">NPO (Nil Per Os - Puasa Medis)</label>
-                  <input type="text" id="inputNPONote" class="mt-1 w-full text-xs px-2.5 py-1.5 rounded-lg border border-rose-300 dark:border-rose-800 bg-white dark:bg-slate-800 text-rose-900 dark:text-rose-200 outline-none">
-                </div>
+              <div class="flex items-center gap-2.5 p-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200">
+                <input type="checkbox" id="checkNPO" class="rounded text-rose-600">
+                <label for="checkNPO" class="font-bold text-rose-900 dark:text-rose-200 text-xs">NPO (Puasa)</label>
+                <input type="text" id="inputNPONote" class="flex-1 text-[11px] px-2 py-1 rounded-lg border border-rose-300 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
               </div>
-
-              <div class="flex items-start gap-3 p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40">
-                <input type="checkbox" id="checkAllergy" class="mt-1 w-4 h-4 text-rose-600 rounded">
-                <div class="flex-1">
-                  <label for="checkAllergy" class="font-bold text-sm text-rose-900 dark:text-rose-200 cursor-pointer">Allergy (Riwayat Alergi Pasien)</label>
-                  <input type="text" id="inputAllergyNote" class="mt-1 w-full text-xs px-2.5 py-1.5 rounded-lg border border-rose-300 dark:border-rose-800 bg-white dark:bg-slate-800 text-rose-900 dark:text-rose-200 outline-none">
-                </div>
+              <div class="flex items-center gap-2.5 p-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200">
+                <input type="checkbox" id="checkAllergy" class="rounded text-rose-600">
+                <label for="checkAllergy" class="font-bold text-rose-900 dark:text-rose-200 text-xs">Allergy</label>
+                <input type="text" id="inputAllergyNote" class="flex-1 text-[11px] px-2 py-1 rounded-lg border border-rose-300 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
               </div>
             </div>
           </div>
 
-          <!-- Form Actions -->
-          <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
-            <button type="button" onclick="closeEditorModal()" class="px-5 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-xl transition">
+          <!-- Buttons -->
+          <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+            <button type="button" onclick="closeEditorModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-xl transition">
               Batal
             </button>
-            <button type="submit" class="px-6 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/20 transition">
+            <button type="submit" class="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/20 transition">
               Simpan Perubahan
             </button>
           </div>

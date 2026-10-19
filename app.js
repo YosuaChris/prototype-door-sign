@@ -116,14 +116,99 @@ const DEFAULT_ROOM_DATA = {
   ]
 };
 
+// Preset Data for 2-Bed Hospital Room (Kelas I Standard)
+const TWO_BED_ROOM_DATA = {
+  roomNumber: "ROOM 306",
+  wardName: "BANGSAL DAHLIA (RAWAT INAP KELAS I)",
+  beds: [
+    {
+      id: "BED A",
+      label: "BED A",
+      physician: "Dr. Robert Chen",
+      rmo: "Dr. Gigi",
+      nurse: "Ns. Dian",
+      visitingStatus: {
+        type: "dnd",
+        title: "Do Not Disturb",
+        note: "Patient resting • No entry"
+      },
+      careEvent: {
+        title: "Next Care Event",
+        status: "Overdue",
+        name: "Vital signs",
+        time: "14:30",
+        note: "Nurse attendance not recorded"
+      },
+      badges: [
+        {
+          type: "fall_risk",
+          title: "Fall Risk",
+          subtitle: "Assist with mobility",
+          standard: "AHA Yellow Band"
+        },
+        {
+          type: "npo",
+          title: "NPO",
+          subtitle: "Nothing by mouth",
+          standard: "Dietary Fasting"
+        },
+        {
+          type: "allergy",
+          title: "Allergy",
+          subtitle: "Penicillin, shellfish",
+          standard: "AHA Red Band"
+        }
+      ]
+    },
+    {
+      id: "BED B",
+      label: "BED B",
+      physician: "Dr. Robert Chen",
+      rmo: "Dr. Gigi",
+      nurse: "Ns. Dian",
+      visitingStatus: {
+        type: "allowed",
+        title: "Visiting Allowed",
+        note: "Max 2 visitors • Mask on"
+      },
+      careEvent: {
+        title: "Next Care Event",
+        status: "In Progress",
+        name: "Vital signs",
+        time: "14:30",
+        note: "Vital signs observation in progress"
+      },
+      badges: [
+        {
+          type: "fall_risk",
+          title: "Fall Risk",
+          subtitle: "Assist with mobility",
+          standard: "AHA Yellow Band"
+        },
+        {
+          type: "npo",
+          title: "NPO",
+          subtitle: "Nothing by mouth",
+          standard: "Dietary Fasting"
+        }
+      ]
+    }
+  ]
+};
+
 // Global App State
+const initialSavedData = JSON.parse(localStorage.getItem('hospital_door_sign_data'));
+const initialData = initialSavedData || JSON.parse(JSON.stringify(DEFAULT_ROOM_DATA));
+
 let state = {
-  data: JSON.parse(localStorage.getItem('hospital_door_sign_data')) || JSON.parse(JSON.stringify(DEFAULT_ROOM_DATA)),
+  data: initialData,
   activeBedIndex: 0,
   privacyMode: false,
   nightMode: false,
   bezelColor: 'black',
-  ledStatusIndex: 0
+  ledStatusIndex: 0,
+  roomMode: (initialData.beds && initialData.beds.length === 2) ? 2 : 3,
+  twoBedLayout: 'side-by-side' // 'side-by-side' or 'stacked'
 };
 
 // Standardized Clinical Vector Icons
@@ -309,6 +394,434 @@ function getVisitingStrip(visiting) {
   }
 }
 
+// Render Single Bed for 3-Bed Layout (Rows)
+function renderThreeBedRow(bed, index) {
+  const event = bed.careEvent || {};
+  const theme = getCareEventTheme(event.status);
+  const visiting = getVisitingStrip(bed.visitingStatus);
+
+  const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : bed.physician;
+  const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
+  const displayNurse = state.privacyMode ? "Ns. [Jaga]" : bed.nurse;
+
+  // Badges HTML (Safety Badges: Fall Risk, NPO, Allergy)
+  const badgesHtml = (bed.badges || []).map(b => {
+    let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
+    let titleClass = "text-[#78350f] dark:text-amber-200";
+    let subClass = "text-[#92400e] dark:text-amber-300";
+    let icon = ICONS.fallRisk;
+
+    if (b.type === 'npo') {
+      bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border border-[#fdba74] dark:border-orange-800";
+      titleClass = "text-[#7c2d12] dark:text-orange-200";
+      subClass = "text-[#9a3412] dark:text-orange-300";
+      icon = ICONS.npo;
+    } else if (b.type === 'allergy') {
+      bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border border-[#fca5a5] dark:border-red-800";
+      titleClass = "text-[#7f1d1d] dark:text-red-200";
+      subClass = "text-[#991b1b] dark:text-red-300";
+      icon = ICONS.allergy;
+    }
+
+    return `
+      <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs flex-1 min-w-0 min-h-0">
+        <div class="flex-shrink-0">${icon}</div>
+        <div class="leading-none min-w-0 truncate">
+          <h4 class="font-extrabold text-xs sm:text-sm md:text-[15px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+          <p class="text-[10.5px] sm:text-xs font-semibold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const eventIcon = theme.iconType === 'check' 
+    ? ICONS.getCheckIcon(theme.iconColor) 
+    : ICONS.getCalendarIcon(theme.iconColor);
+
+  return `
+    <!-- BED CARD ROW: ${bed.label} (Fixed 33.3% height, Maximized Vertical Stretch) -->
+    <div onclick="editSpecificBed(${index})" class="bed-card-fixed-row cursor-pointer bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl px-4 sm:px-5 py-2.5 sm:py-3 gap-3.5 sm:gap-4 md:gap-6 shadow-2xs relative group items-stretch">
+      
+      <!-- LEFT: Bed ID + Care Team (Stretched Vertically) -->
+      <div class="self-stretch flex items-stretch gap-3.5 sm:gap-4 md:gap-5 min-w-[260px] sm:min-w-[290px] md:min-w-[320px] flex-shrink-0">
+        
+        <!-- Bed Icon Box (Stretched to match card height) -->
+        <div class="w-24 sm:w-28 md:w-32 self-stretch rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border-2 border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1.5 flex-shrink-0 shadow-2xs">
+          ${ICONS.bed}
+          <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-sm sm:text-base md:text-lg tracking-wider leading-none mt-1">${bed.label}</span>
+        </div>
+
+        <!-- Care Team Details (Evenly spaced across vertical height) -->
+        <div class="self-stretch flex flex-col justify-between py-1 sm:py-1.5 min-w-0 flex-1">
+          <div>
+            <p class="text-[10.5px] sm:text-[11.5px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Attending physician</p>
+            <h3 class="text-sm sm:text-base md:text-[17px] font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-1">${displayPhysician}</h3>
+          </div>
+          <div>
+            <p class="text-[10.5px] sm:text-[11.5px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Resident Medical Officer</p>
+            <h3 class="text-sm sm:text-base md:text-[17px] font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-1">${displayRMO}</h3>
+          </div>
+          <div>
+            <p class="text-[10.5px] sm:text-[11.5px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Nurse</p>
+            <h3 class="text-sm sm:text-base md:text-[17px] font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-1">${displayNurse}</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="hidden md:block w-[1.5px] self-stretch my-1.5 bg-slate-200 dark:bg-slate-800 flex-shrink-0"></div>
+
+      <!-- MIDDLE: Next Care Event + Visiting Status (Maximized Height, Stacked Vertically) -->
+      <div class="self-stretch flex-1 min-w-[270px] sm:min-w-[320px] flex flex-col justify-between min-w-0 gap-2 sm:gap-2.5">
+        
+        <!-- Next Care Event Box (Expanded to fill top area) -->
+        <div class="flex-1 flex flex-col justify-center border-2 ${theme.boxClass} rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2 sm:py-2.5 transition-all duration-300 relative shadow-2xs min-h-0">
+          <h3 class="font-black text-xs sm:text-sm ${theme.titleClass} tracking-tight mb-1 sm:mb-1.5 flex items-center gap-2 leading-none">
+            <span>${event.title || 'Next Care Event'}</span>
+            ${theme.pulseDot ? '<span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>' : ''}
+          </h3>
+
+          <div class="flex items-center gap-3">
+            ${eventIcon}
+
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] sm:text-xs font-extrabold border ${theme.badgeClass}">
+                  ${event.status}
+                </span>
+                <span class="font-extrabold text-sm sm:text-base md:text-[16px] ${theme.textClass} truncate">
+                  ${event.name} • ${event.time}
+                </span>
+              </div>
+              <p class="text-xs sm:text-[13px] ${theme.noteClass} font-semibold mt-1 truncate">
+                ${event.note || 'Observation recorded'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visiting Status Strip (Expanded bar directly below Next Care Event) -->
+        ${visiting ? `
+          <div class="flex-shrink-0 flex items-center justify-between px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl ${visiting.stripClass} border-2 transition-all shadow-2xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="flex-shrink-0">${visiting.icon}</div>
+              <div class="flex items-center gap-1.5 min-w-0 truncate">
+                <span class="font-black text-xs sm:text-sm md:text-[14.5px] ${visiting.titleClass} truncate">${visiting.title}</span>
+                <span class="text-[11px] sm:text-xs md:text-[13px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
+              </div>
+            </div>
+            <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">
+              Visiting
+            </span>
+          </div>
+        ` : ''}
+
+      </div>
+
+      <!-- RIGHT: Clinical Safety Alerts Only (Stretched across full row height) -->
+      <div class="self-stretch w-48 sm:w-56 md:w-68 flex flex-col justify-between gap-2 sm:gap-2.5 flex-shrink-0">
+        ${badgesHtml}
+      </div>
+
+    </div>
+  `;
+}
+
+// Render Single Bed for 2-Bed Side-by-Side Layout (2 Columns)
+function renderTwoBedSideBySide(bed, index) {
+  const event = bed.careEvent || {};
+  const theme = getCareEventTheme(event.status);
+  const visiting = getVisitingStrip(bed.visitingStatus);
+
+  const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : bed.physician;
+  const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
+  const displayNurse = state.privacyMode ? "Ns. [Jaga]" : bed.nurse;
+
+  const eventIcon = theme.iconType === 'check' 
+    ? ICONS.getCheckIcon(theme.iconColor) 
+    : ICONS.getCalendarIcon(theme.iconColor);
+
+  const badgesHtml = (bed.badges || []).map(b => {
+    let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
+    let titleClass = "text-[#78350f] dark:text-amber-200";
+    let subClass = "text-[#92400e] dark:text-amber-300";
+    let icon = ICONS.fallRisk;
+
+    if (b.type === 'npo') {
+      bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border border-[#fdba74] dark:border-orange-800";
+      titleClass = "text-[#7c2d12] dark:text-orange-200";
+      subClass = "text-[#9a3412] dark:text-orange-300";
+      icon = ICONS.npo;
+    } else if (b.type === 'allergy') {
+      bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border border-[#fca5a5] dark:border-red-800";
+      titleClass = "text-[#7f1d1d] dark:text-red-200";
+      subClass = "text-[#991b1b] dark:text-red-300";
+      icon = ICONS.allergy;
+    }
+
+    return `
+      <div class="flex items-center gap-2.5 px-3.5 py-2 sm:py-2.5 rounded-xl ${bgClass} shadow-2xs min-w-0">
+        <div class="flex-shrink-0">${icon}</div>
+        <div class="leading-none min-w-0 truncate">
+          <h4 class="font-extrabold text-xs sm:text-sm tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+          <p class="text-[10.5px] sm:text-xs font-semibold ${subClass} mt-0.5 truncate leading-tight">${b.subtitle}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div onclick="editSpecificBed(${index})" class="bed-card-fixed-col cursor-pointer bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-4 sm:p-5 gap-3 sm:gap-3.5 shadow-2xs relative group">
+      
+      <!-- TOP: Bed ID Header + Visiting Status -->
+      <div class="flex items-center justify-between gap-2.5 pb-2.5 sm:pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border-2 border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-0.5 shadow-2xs flex-shrink-0">
+            ${ICONS.bed}
+            <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-xs sm:text-sm tracking-wider leading-none">${bed.label}</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">STATUS BED</span>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100">Occupied (Terisi)</span>
+            </div>
+          </div>
+        </div>
+
+        ${visiting ? `
+          <div class="flex items-center gap-2 px-3 py-1.5 sm:py-2 rounded-xl ${visiting.stripClass} border-2 shadow-2xs max-w-[200px] sm:max-w-[230px]">
+            <div class="flex-shrink-0">${visiting.icon}</div>
+            <div class="leading-tight min-w-0 truncate">
+              <h4 class="font-black text-xs sm:text-[13px] ${visiting.titleClass} truncate">${visiting.title}</h4>
+              <p class="text-[10px] sm:text-[11px] font-semibold ${visiting.subClass} truncate">${visiting.subtitle}</p>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- CARE TEAM SECTION -->
+      <div class="bg-slate-50/90 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3 sm:p-3.5 space-y-2">
+        <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-0.5">
+          <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+          <span>Tim Medis Pasien</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">DPJP (Dokter Utama)</span>
+          <span class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white truncate ml-2">${displayPhysician}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Dokter Ruangan (RMO)</span>
+          <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 truncate ml-2">${displayRMO}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Perawat Penanggung Jawab</span>
+          <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 truncate ml-2">${displayNurse}</span>
+        </div>
+      </div>
+
+      <!-- NEXT CARE EVENT (Prominent Card) -->
+      <div class="border-2 ${theme.boxClass} rounded-xl p-3 sm:p-3.5 shadow-2xs">
+        <div class="flex items-center justify-between mb-1.5">
+          <h3 class="font-black text-xs sm:text-[13px] ${theme.titleClass} tracking-tight flex items-center gap-1.5">
+            <span>${event.title || 'Next Care Event'}</span>
+            ${theme.pulseDot ? '<span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>' : ''}
+          </h3>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-extrabold border ${theme.badgeClass}">
+            ${event.status}
+          </span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          ${eventIcon}
+          <div class="min-w-0 flex-1">
+            <div class="font-extrabold text-xs sm:text-sm md:text-base ${theme.textClass} truncate">
+              ${event.name} • ${event.time}
+            </div>
+            <p class="text-[11px] sm:text-xs ${theme.noteClass} font-semibold mt-0.5 truncate">
+              ${event.note || 'Observation recorded'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL SAFETY ALERTS (Stacked at bottom) -->
+      <div class="flex-1 flex flex-col justify-end space-y-1.5 min-h-0">
+        <div class="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+          <span>Indikator Keselamatan Pasien</span>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          ${badgesHtml}
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+// Render Single Bed for 2-Bed Stacked Layout (2 Rows)
+function renderTwoBedStacked(bed, index) {
+  const event = bed.careEvent || {};
+  const theme = getCareEventTheme(event.status);
+  const visiting = getVisitingStrip(bed.visitingStatus);
+
+  const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : bed.physician;
+  const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
+  const displayNurse = state.privacyMode ? "Ns. [Jaga]" : bed.nurse;
+
+  const eventIcon = theme.iconType === 'check' 
+    ? ICONS.getCheckIcon(theme.iconColor) 
+    : ICONS.getCalendarIcon(theme.iconColor);
+
+  const badgesHtml = (bed.badges || []).map(b => {
+    let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
+    let titleClass = "text-[#78350f] dark:text-amber-200";
+    let subClass = "text-[#92400e] dark:text-amber-300";
+    let icon = ICONS.fallRisk;
+
+    if (b.type === 'npo') {
+      bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border border-[#fdba74] dark:border-orange-800";
+      titleClass = "text-[#7c2d12] dark:text-orange-200";
+      subClass = "text-[#9a3412] dark:text-orange-300";
+      icon = ICONS.npo;
+    } else if (b.type === 'allergy') {
+      bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border border-[#fca5a5] dark:border-red-800";
+      titleClass = "text-[#7f1d1d] dark:text-red-200";
+      subClass = "text-[#991b1b] dark:text-red-300";
+      icon = ICONS.allergy;
+    }
+
+    return `
+      <div class="flex items-center gap-3 px-4 py-2.5 rounded-xl ${bgClass} shadow-2xs flex-1 min-w-0 min-h-0">
+        <div class="flex-shrink-0">${icon}</div>
+        <div class="leading-none min-w-0 truncate">
+          <h4 class="font-extrabold text-sm sm:text-base tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+          <p class="text-xs font-semibold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div onclick="editSpecificBed(${index})" class="bed-card-fixed-row cursor-pointer bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl px-5 py-3.5 gap-6 shadow-2xs relative group items-stretch">
+      
+      <!-- LEFT: Bed ID + Care Team -->
+      <div class="self-stretch flex items-stretch gap-5 min-w-[310px] sm:min-w-[340px] flex-shrink-0">
+        <div class="w-28 sm:w-32 self-stretch rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border-2 border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-2 flex-shrink-0 shadow-2xs">
+          ${ICONS.bed}
+          <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-base sm:text-lg tracking-wider leading-none mt-1">${bed.label}</span>
+          <span class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">TERISI</span>
+        </div>
+
+        <div class="self-stretch flex flex-col justify-between py-1 min-w-0 flex-1">
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none">Attending physician (DPJP)</p>
+            <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight truncate mt-1">${displayPhysician}</h3>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none">Resident Medical Officer</p>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white leading-tight truncate mt-1">${displayRMO}</h3>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none">Nurse In Charge</p>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white leading-tight truncate mt-1">${displayNurse}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden md:block w-[1.5px] self-stretch my-2 bg-slate-200 dark:bg-slate-800 flex-shrink-0"></div>
+
+      <!-- MIDDLE: Next Care Event + Visiting Status -->
+      <div class="self-stretch flex-1 min-w-[320px] flex flex-col justify-between gap-3 min-w-0">
+        <div class="flex-1 flex flex-col justify-center border-2 ${theme.boxClass} rounded-2xl px-4 py-3 shadow-2xs min-h-0">
+          <div class="flex items-center justify-between mb-1.5">
+            <h3 class="font-black text-sm ${theme.titleClass} tracking-tight flex items-center gap-2">
+              <span>${event.title || 'Next Care Event'}</span>
+              ${theme.pulseDot ? '<span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>' : ''}
+            </h3>
+            <span class="px-2.5 py-0.5 rounded-md text-xs font-black border ${theme.badgeClass}">${event.status}</span>
+          </div>
+          <div class="flex items-center gap-3">
+            ${eventIcon}
+            <div class="min-w-0 flex-1">
+              <div class="font-black text-base sm:text-lg ${theme.textClass} truncate">${event.name} • ${event.time}</div>
+              <p class="text-xs sm:text-sm ${theme.noteClass} font-semibold mt-1 truncate">${event.note || 'Observation recorded'}</p>
+            </div>
+          </div>
+        </div>
+
+        ${visiting ? `
+          <div class="flex-shrink-0 flex items-center justify-between px-4 py-2.5 rounded-xl ${visiting.stripClass} border-2 shadow-2xs">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="flex-shrink-0">${visiting.icon}</div>
+              <div class="flex items-center gap-2 min-w-0 truncate">
+                <span class="font-black text-sm ${visiting.titleClass} truncate">${visiting.title}</span>
+                <span class="text-xs ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">Visiting</span>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- RIGHT: Clinical Safety Alerts -->
+      <div class="self-stretch w-56 sm:w-68 flex flex-col justify-between gap-2.5 flex-shrink-0">
+        ${badgesHtml}
+      </div>
+
+    </div>
+  `;
+}
+
+// Update Preset Buttons Active State
+function updatePresetButtons() {
+  const numBeds = state.data.beds ? state.data.beds.length : 3;
+  const btn3 = document.getElementById('btnPreset3Bed');
+  const btn2 = document.getElementById('btnPreset2Bed');
+  const btnSide = document.getElementById('btnLayoutSideBySide');
+  const btnStack = document.getElementById('btnLayoutStacked');
+
+  if (btn3 && btn2) {
+    if (numBeds === 3) {
+      btn3.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs";
+      btn2.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
+    } else {
+      btn2.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs";
+      btn3.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
+    }
+  }
+
+  if (btnSide && btnStack) {
+    if (state.twoBedLayout === 'side-by-side') {
+      btnSide.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs";
+      btnStack.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
+    } else {
+      btnStack.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs";
+      btnSide.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
+    }
+  }
+}
+
+// Preset Switcher Function
+function setRoomPreset(numBeds) {
+  state.roomMode = numBeds;
+  if (numBeds === 2) {
+    state.data = JSON.parse(JSON.stringify(TWO_BED_ROOM_DATA));
+  } else {
+    state.data = JSON.parse(JSON.stringify(DEFAULT_ROOM_DATA));
+  }
+  state.activeBedIndex = 0;
+  localStorage.setItem('hospital_door_sign_data', JSON.stringify(state.data));
+  renderSignage();
+}
+
+// 2-Bed Layout Mode Switcher (Side-by-Side vs Stacked)
+function setTwoBedLayout(layout) {
+  state.twoBedLayout = layout;
+  renderSignage();
+}
+
 // Render Signage Board inside the 16:10 fixed 10.1" frame
 function renderSignage() {
   const container = document.getElementById('bedCardsContainer');
@@ -317,138 +830,43 @@ function renderSignage() {
   document.getElementById('roomNumber').textContent = state.data.roomNumber || 'ROOM 308';
   document.getElementById('wardName').textContent = state.data.wardName || 'BANGSAL DAHLIA (RAWAT INAP KELAS I)';
 
-  container.innerHTML = state.data.beds.map((bed, index) => {
-    const event = bed.careEvent || {};
-    const theme = getCareEventTheme(event.status);
-    const visiting = getVisitingStrip(bed.visitingStatus);
+  const numBeds = state.data.beds ? state.data.beds.length : 3;
+  const twoBedControls = document.getElementById('twoBedLayoutControls');
+  const caption = document.getElementById('presentationCaption');
 
-    const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : bed.physician;
-    const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
-    const displayNurse = state.privacyMode ? "Ns. [Jaga]" : bed.nurse;
+  updatePresetButtons();
 
-    // Badges HTML (Safety Badges: Fall Risk, NPO, Allergy)
-    const badgesHtml = (bed.badges || []).map(b => {
-      let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border border-[#fcd34d] dark:border-amber-800";
-      let titleClass = "text-[#78350f] dark:text-amber-200";
-      let subClass = "text-[#92400e] dark:text-amber-300";
-      let icon = ICONS.fallRisk;
+  if (numBeds === 2) {
+    if (twoBedControls) {
+      twoBedControls.classList.remove('hidden');
+      twoBedControls.classList.add('flex');
+    }
 
-      if (b.type === 'npo') {
-        bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border border-[#fdba74] dark:border-orange-800";
-        titleClass = "text-[#7c2d12] dark:text-orange-200";
-        subClass = "text-[#9a3412] dark:text-orange-300";
-        icon = ICONS.npo;
-      } else if (b.type === 'allergy') {
-        bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border border-[#fca5a5] dark:border-red-800";
-        titleClass = "text-[#7f1d1d] dark:text-red-200";
-        subClass = "text-[#991b1b] dark:text-red-300";
-        icon = ICONS.allergy;
+    if (state.twoBedLayout === 'side-by-side') {
+      container.className = "flex-1 min-h-0 grid grid-cols-2 gap-3 sm:gap-4 overflow-hidden";
+      container.innerHTML = state.data.beds.map((bed, index) => renderTwoBedSideBySide(bed, index)).join('');
+      if (caption) {
+        caption.innerHTML = "🔒 <strong>Layout 2-Bed Kiri-Kanan (Spatial 16:10):</strong> Memetakan posisi fisik ranjang di kamar (Bed A di kiri, Bed B di kanan) dengan pemanfaatan layar penuh tanpa ruang kosong.";
       }
+    } else {
+      container.className = "flex-1 min-h-0 grid grid-rows-2 gap-3 sm:gap-4 overflow-hidden";
+      container.innerHTML = state.data.beds.map((bed, index) => renderTwoBedStacked(bed, index)).join('');
+      if (caption) {
+        caption.innerHTML = "🔒 <strong>Layout 2-Bed Atas-Bawah (Expanded 16:10):</strong> Format 2 baris proporsional yang membesar memenuhi seluruh tinggi layar tablet 10.1 inci.";
+      }
+    }
+  } else {
+    if (twoBedControls) {
+      twoBedControls.classList.remove('flex');
+      twoBedControls.classList.add('hidden');
+    }
 
-      return `
-        <div class="flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl ${bgClass} transition-all duration-200 shadow-2xs flex-1 min-w-0 min-h-0">
-          <div class="flex-shrink-0">${icon}</div>
-          <div class="leading-none min-w-0 truncate">
-            <h4 class="font-extrabold text-xs sm:text-sm md:text-[15px] tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
-            <p class="text-[10.5px] sm:text-xs font-semibold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    const eventIcon = theme.iconType === 'check' 
-      ? ICONS.getCheckIcon(theme.iconColor) 
-      : ICONS.getCalendarIcon(theme.iconColor);
-
-    return `
-      <!-- BED CARD ROW: ${bed.label} (Fixed 33.3% height, Maximized Vertical Stretch) -->
-      <div onclick="editSpecificBed(${index})" class="bed-card-fixed-row cursor-pointer bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl px-4 sm:px-5 py-2.5 sm:py-3 gap-3.5 sm:gap-4 md:gap-6 shadow-2xs relative group items-stretch">
-        
-        <!-- LEFT: Bed ID + Care Team (Stretched Vertically) -->
-        <div class="self-stretch flex items-stretch gap-3.5 sm:gap-4 md:gap-5 min-w-[260px] sm:min-w-[290px] md:min-w-[320px] flex-shrink-0">
-          
-          <!-- Bed Icon Box (Stretched to match card height) -->
-          <div class="w-24 sm:w-28 md:w-32 self-stretch rounded-2xl bg-[#f0f7ff] dark:bg-sky-950/60 border-2 border-[#bae6fd] dark:border-sky-800 flex flex-col items-center justify-center gap-1.5 flex-shrink-0 shadow-2xs">
-            ${ICONS.bed}
-            <span class="font-black text-[#0369a1] dark:text-[#38bdf8] text-sm sm:text-base md:text-lg tracking-wider leading-none mt-1">${bed.label}</span>
-          </div>
-
-          <!-- Care Team Details (Evenly spaced across vertical height) -->
-          <div class="self-stretch flex flex-col justify-between py-1 sm:py-1.5 min-w-0 flex-1">
-            <div>
-              <p class="text-[10.5px] sm:text-[11.5px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Attending physician</p>
-              <h3 class="text-sm sm:text-base md:text-[17px] font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-1">${displayPhysician}</h3>
-            </div>
-            <div>
-              <p class="text-[10.5px] sm:text-[11.5px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Resident Medical Officer</p>
-              <h3 class="text-sm sm:text-base md:text-[17px] font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-1">${displayRMO}</h3>
-            </div>
-            <div>
-              <p class="text-[10.5px] sm:text-[11.5px] font-bold text-[#475569] dark:text-slate-400 tracking-wider uppercase leading-none">Nurse</p>
-              <h3 class="text-sm sm:text-base md:text-[17px] font-extrabold text-[#0f172a] dark:text-white leading-tight truncate mt-1">${displayNurse}</h3>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- DIVIDER -->
-        <div class="hidden md:block w-[1.5px] self-stretch my-1.5 bg-slate-200 dark:bg-slate-800 flex-shrink-0"></div>
-
-        <!-- MIDDLE: Next Care Event + Visiting Status (Maximized Height, Stacked Vertically) -->
-        <div class="self-stretch flex-1 min-w-[270px] sm:min-w-[320px] flex flex-col justify-between min-w-0 gap-2 sm:gap-2.5">
-          
-          <!-- Next Care Event Box (Expanded to fill top area) -->
-          <div class="flex-1 flex flex-col justify-center border-2 ${theme.boxClass} rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2 sm:py-2.5 transition-all duration-300 relative shadow-2xs min-h-0">
-            <h3 class="font-black text-xs sm:text-sm ${theme.titleClass} tracking-tight mb-1 sm:mb-1.5 flex items-center gap-2 leading-none">
-              <span>${event.title || 'Next Care Event'}</span>
-              ${theme.pulseDot ? '<span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>' : ''}
-            </h3>
-
-            <div class="flex items-center gap-3">
-              ${eventIcon}
-
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] sm:text-xs font-extrabold border ${theme.badgeClass}">
-                    ${event.status}
-                  </span>
-                  <span class="font-extrabold text-sm sm:text-base md:text-[16px] ${theme.textClass} truncate">
-                    ${event.name} • ${event.time}
-                  </span>
-                </div>
-                <p class="text-xs sm:text-[13px] ${theme.noteClass} font-semibold mt-1 truncate">
-                  ${event.note || 'Observation recorded'}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Visiting Status Strip (Expanded bar directly below Next Care Event) -->
-          ${visiting ? `
-            <div class="flex-shrink-0 flex items-center justify-between px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl ${visiting.stripClass} border-2 transition-all shadow-2xs">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="flex-shrink-0">${visiting.icon}</div>
-                <div class="flex items-center gap-1.5 min-w-0 truncate">
-                  <span class="font-black text-xs sm:text-sm md:text-[14.5px] ${visiting.titleClass} truncate">${visiting.title}</span>
-                  <span class="text-[11px] sm:text-xs md:text-[13px] ${visiting.subClass} font-semibold truncate">• ${visiting.subtitle}</span>
-                </div>
-              </div>
-              <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">
-                Visiting
-              </span>
-            </div>
-          ` : ''}
-
-        </div>
-
-        <!-- RIGHT: Clinical Safety Alerts Only (Stretched across full row height) -->
-        <div class="self-stretch w-48 sm:w-56 md:w-68 flex flex-col justify-between gap-2 sm:gap-2.5 flex-shrink-0">
-          ${badgesHtml}
-        </div>
-
-      </div>
-    `;
-  }).join('');
+    container.className = "flex-1 min-h-0 grid grid-rows-3 gap-2.5 sm:gap-3 overflow-hidden";
+    container.innerHTML = state.data.beds.map((bed, index) => renderThreeBedRow(bed, index)).join('');
+    if (caption) {
+      caption.innerHTML = "🔒 <strong>Rasio 16:10 Terkunci (3 Bed):</strong> Ukuran frame dan proporsi 3 kartu bed bersifat <em>fixed</em> permanen merepresentasikan layar tablet 10.1 inci fisik (1280×800).";
+    }
+  }
 }
 
 // Set Frame Bezel Color (Black / White / Silver)

@@ -60,8 +60,29 @@
 
     <!-- Presentation Controls -->
     <div class="flex items-center gap-2 flex-wrap text-xs">
+      
+      <!-- Room Capacity Selector (3 Bed vs 2 Bed) -->
+      <div class="flex items-center bg-slate-800/95 border border-slate-700 p-0.5 rounded-xl shadow-xs">
+        <button onclick="setRoomPreset(3)" id="btnPreset3Bed" class="px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs" title="Preset Kamar 3 Bed (Kelas II / Dahlia 308)">
+          Kamar 3 Bed
+        </button>
+        <button onclick="setRoomPreset(2)" id="btnPreset2Bed" class="px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white" title="Preset Kamar 2 Bed (Kelas I / Dahlia 306)">
+          Kamar 2 Bed
+        </button>
+      </div>
+
+      <!-- 2-Bed Dynamic Layout Selector (Hidden when in 3-bed mode) -->
+      <div id="twoBedLayoutControls" class="hidden items-center bg-slate-800/95 border border-slate-700 p-0.5 rounded-xl shadow-xs">
+        <button onclick="setTwoBedLayout('side-by-side')" id="btnLayoutSideBySide" class="px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs" title="Tata letak 2 kolom kiri-kanan (Spatial mapping posisi ranjang fisik)">
+          ◫ Kiri-Kanan
+        </button>
+        <button onclick="setTwoBedLayout('stacked')" id="btnLayoutStacked" class="px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white" title="Tata letak 2 baris atas-bawah (Expanded horizontal stack)">
+          ▤ Atas-Bawah
+        </button>
+      </div>
+
       <!-- Edit Data Button -->
-      <button onclick="openEditorModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 font-bold rounded-xl bg-sky-600 text-white hover:bg-sky-500 transition shadow-sm">
+      <button onclick="openEditorModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 font-bold rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition shadow-sm">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
         <span>Kelola Data Bed</span>
       </button>
@@ -170,7 +191,7 @@
 
     <!-- PRESENTATION CAPTION -->
     <div class="text-center mt-3 text-[11px] text-slate-400">
-      <p>🔒 <strong>Rasio 16:10 Terkunci:</strong> Ukuran frame dan proporsi 3 kartu bed bersifat <em>fixed</em> permanen merepresentasikan layar tablet 10.1 inci fisik (1280×800).</p>
+      <p id="presentationCaption">🔒 <strong>Rasio 16:10 Terkunci:</strong> Ukuran frame dan proporsi 3 kartu bed bersifat <em>fixed</em> permanen merepresentasikan layar tablet 10.1 inci fisik (1280×800).</p>
     </div>
 
   </main>

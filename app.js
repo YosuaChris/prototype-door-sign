@@ -1,5 +1,5 @@
 /**
- * Hospital Smart Door Sign Application - Clinical Best Practice Palette
+ * Hospital Smart Door Sign Application - Dynamic Clinical Event Theming
  * Standardized to JCI / KARS Patient Safety & WCAG AAA Contrast
  */
 
@@ -50,10 +50,10 @@ const DEFAULT_ROOM_DATA = {
       nurse: "Ns. Dian",
       careEvent: {
         title: "Next Care Event",
-        status: "Overdue",
+        status: "In Progress",
         name: "Vital signs",
         time: "14:30",
-        note: "Nurse attendance not recorded"
+        note: "Vital signs observation in progress"
       },
       badges: [
         {
@@ -78,10 +78,10 @@ const DEFAULT_ROOM_DATA = {
       nurse: "Ns. Dian",
       careEvent: {
         title: "Next Care Event",
-        status: "Overdue",
-        name: "Vital signs",
-        time: "14:30",
-        note: "Nurse attendance not recorded"
+        status: "Scheduled",
+        name: "Doctor Round",
+        time: "15:00",
+        note: "DPJP routine check-in"
       },
       badges: [
         {
@@ -111,9 +111,8 @@ let state = {
   ledStatusIndex: 0
 };
 
-// Standardized Clinical Vector Icons (High visual distinctiveness for dual-encoding)
+// Standardized Clinical Vector Icons (Using currentColor for contextual theme adaptability)
 const ICONS = {
-  // Bed Icon (Clinical Blue)
   bed: `
     <svg class="w-10 h-10 sm:w-11 sm:h-11 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 19h20M2 17v2M22 17v2" />
@@ -121,9 +120,30 @@ const ICONS = {
       <path d="M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
     </svg>
   `,
-  // Next Care Event Calendar (Clinical Crimson)
-  calendar: `
-    <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#be123c] dark:text-[#fb7185] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  fallRisk: `
+    <svg class="w-6 h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+  `,
+  npo: `
+    <svg class="w-6 h-6 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+    </svg>
+  `,
+  allergy: `
+    <svg class="w-6 h-6 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+    </svg>
+  `,
+  // Function to get dynamically colored calendar icon
+  getCalendarIcon: (colorClass) => `
+    <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
       <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -133,31 +153,76 @@ const ICONS = {
       <circle cx="16" cy="15" r="0.8" fill="currentColor"></circle>
     </svg>
   `,
-  // Fall Risk: Triangle Warning (Standard Yellow/Amber Alert)
-  fallRisk: `
-    <svg class="w-6 h-6 text-[#b45309] dark:text-[#fde68a] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-      <line x1="12" y1="9" x2="12" y2="13"></line>
-      <line x1="12" y1="17" x2="12.01" y2="17"></line>
-    </svg>
-  `,
-  // NPO (Nil Per Os): Crossed Utensils / Fasting Symbol (Standard Dietary Orange/Coral)
-  npo: `
-    <svg class="w-6 h-6 text-[#ea580c] dark:text-[#fdba74] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-    </svg>
-  `,
-  // Allergy: Medical Hazard Alert (Standard Red Wristband Alert)
-  allergy: `
-    <svg class="w-6 h-6 text-[#dc2626] dark:text-[#fca5a5] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="8" x2="12" y2="12"></line>
-      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+  // Checkmark icon for Completed events
+  getCheckIcon: (colorClass) => `
+    <svg class="w-6 h-6 sm:w-7 sm:h-7 ${colorClass} flex-shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
     </svg>
   `
 };
+
+/**
+ * Returns contextual clinical theme based on care event status:
+ * - Overdue: Red / Clinical Crimson (Emergency / Urgent Action)
+ * - In Progress: Sky / Active Clinical Cyan (Ongoing Activity)
+ * - Scheduled: Slate / Neutral Medical (Upcoming on track)
+ * - Done / Completed: Emerald / Calming Green (Finished)
+ */
+function getCareEventTheme(status) {
+  const normStatus = (status || '').toLowerCase().trim();
+
+  if (normStatus === 'overdue') {
+    return {
+      boxClass: 'border-[#fca5a5] dark:border-rose-900/60 bg-[#fff5f5] dark:bg-rose-950/25 animate-overdue-pulse',
+      titleClass: 'text-[#be123c] dark:text-[#fb7185]',
+      iconColor: 'text-[#be123c] dark:text-[#fb7185]',
+      badgeClass: 'bg-[#fee2e2] text-[#991b1b] border-[#fca5a5] dark:bg-rose-950/80 dark:text-rose-200 dark:border-rose-800',
+      textClass: 'text-[#9f1239] dark:text-[#fda4af]',
+      noteClass: 'text-[#be123c] dark:text-rose-300',
+      iconType: 'calendar',
+      pulseDot: false
+    };
+  }
+
+  if (normStatus === 'in progress' || normStatus === 'in_progress') {
+    return {
+      boxClass: 'border-sky-300 dark:border-sky-800 bg-sky-50/70 dark:bg-sky-950/25',
+      titleClass: 'text-sky-900 dark:text-sky-200',
+      iconColor: 'text-sky-600 dark:text-sky-400',
+      badgeClass: 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-900/60 dark:text-sky-200 dark:border-sky-700',
+      textClass: 'text-slate-900 dark:text-slate-100',
+      noteClass: 'text-sky-700 dark:text-sky-300',
+      iconType: 'calendar',
+      pulseDot: true
+    };
+  }
+
+  if (normStatus === 'done' || normStatus === 'completed') {
+    return {
+      boxClass: 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/25',
+      titleClass: 'text-emerald-900 dark:text-emerald-200',
+      iconColor: 'text-emerald-600 dark:text-emerald-400',
+      badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/60 dark:text-emerald-200 dark:border-emerald-700',
+      textClass: 'text-slate-900 dark:text-slate-100',
+      noteClass: 'text-emerald-700 dark:text-emerald-300',
+      iconType: 'check',
+      pulseDot: false
+    };
+  }
+
+  // Default: Scheduled / Upcoming
+  return {
+    boxClass: 'border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/40',
+    titleClass: 'text-slate-700 dark:text-slate-200',
+    iconColor: 'text-slate-500 dark:text-slate-400',
+    badgeClass: 'bg-slate-200/80 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600',
+    textClass: 'text-slate-900 dark:text-slate-100',
+    noteClass: 'text-slate-500 dark:text-slate-400',
+    iconType: 'calendar',
+    pulseDot: false
+  };
+}
 
 // Render Signage Board with Best Practice Clinical Styling
 function renderSignage() {
@@ -169,7 +234,7 @@ function renderSignage() {
 
   container.innerHTML = state.data.beds.map((bed, index) => {
     const event = bed.careEvent || {};
-    const isOverdue = (event.status || '').toLowerCase() === 'overdue';
+    const theme = getCareEventTheme(event.status);
 
     const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : bed.physician;
     const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : bed.rmo;
@@ -207,6 +272,10 @@ function renderSignage() {
       `;
     }).join('');
 
+    const eventIcon = theme.iconType === 'check' 
+      ? ICONS.getCheckIcon(theme.iconColor) 
+      : ICONS.getCalendarIcon(theme.iconColor);
+
     return `
       <!-- BED CARD: ${bed.label} -->
       <div onclick="editSpecificBed(${index})" class="bed-card-item cursor-pointer bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-200 hover:shadow-md relative overflow-hidden group">
@@ -243,34 +312,29 @@ function renderSignage() {
           <!-- VERTICAL DIVIDER -->
           <div class="hidden lg:block w-[1px] h-20 sm:h-24 bg-slate-200 dark:bg-slate-800 self-center flex-shrink-0"></div>
 
-          <!-- MIDDLE SECTION: Next Care Event Box (Clinical Crimson Alert) -->
+          <!-- MIDDLE SECTION: Next Care Event Box (Contextual Clinical Theming) -->
           <div class="flex-1 max-w-sm sm:max-w-md">
-            <div class="border ${isOverdue ? 'border-[#fca5a5] dark:border-rose-900/60 bg-[#fff5f5] dark:bg-rose-950/25' : 'border-sky-200 dark:border-sky-900 bg-sky-50/40 dark:bg-sky-950/20'} rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 relative ${isOverdue ? 'animate-overdue-pulse' : ''}">
+            <div class="border ${theme.boxClass} rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 relative">
               <div>
-                <h3 class="font-extrabold text-sm sm:text-base text-[#be123c] dark:text-[#fb7185] tracking-tight mb-1.5">
-                  ${event.title || 'Next Care Event'}
+                <h3 class="font-extrabold text-sm sm:text-base ${theme.titleClass} tracking-tight mb-1.5 flex items-center gap-1.5">
+                  <span>${event.title || 'Next Care Event'}</span>
+                  ${theme.pulseDot ? '<span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>' : ''}
                 </h3>
 
                 <div class="flex items-center gap-3">
-                  ${ICONS.calendar}
+                  ${eventIcon}
 
                   <div class="flex flex-col">
                     <div class="flex items-center gap-1.5 sm:gap-2">
-                      ${isOverdue ? `
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#fee2e2] text-[#991b1b] border border-[#fca5a5]">
-                          Overdue
-                        </span>
-                      ` : `
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-300">
-                          ${event.status}
-                        </span>
-                      `}
-                      <span class="font-bold text-xs sm:text-sm md:text-base text-[#9f1239] dark:text-[#fda4af]">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border ${theme.badgeClass}">
+                        ${event.status}
+                      </span>
+                      <span class="font-bold text-xs sm:text-sm md:text-base ${theme.textClass}">
                         ${event.name} • ${event.time}
                       </span>
                     </div>
-                    <p class="text-[11px] text-[#be123c] dark:text-rose-300 font-medium mt-0.5">
-                      ${event.note || 'Nurse attendance not recorded'}
+                    <p class="text-[11px] ${theme.noteClass} font-medium mt-0.5">
+                      ${event.note || 'Observation recorded'}
                     </p>
                   </div>
                 </div>

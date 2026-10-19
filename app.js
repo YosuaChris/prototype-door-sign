@@ -196,6 +196,77 @@ const TWO_BED_ROOM_DATA = {
   ]
 };
 
+// Preset Data for 1-Bed Executive VIP Suite (Gedung Anggrek Fl. 7)
+const VIP_ROOM_DATA = {
+  roomNumber: "SUITE 701",
+  wardName: "ANGGREK EXECUTIVE SUITE (VIP)",
+  beds: [
+    {
+      id: "BED VIP",
+      label: "SUITE 701",
+      patientCode: "RM-772910",
+      physician: "Dr. Robert Chen, Sp.PD-KGEH",
+      rmo: "Dr. Gigi Pratama",
+      nurse: "Ns. Dian Anggraeni, S.Kep",
+      visitingStatus: {
+        type: "dnd",
+        title: "Do Not Disturb (Istirahat Penuh)",
+        note: "Pasien istirahat intensif • Kunjungan ditunda sementara"
+      },
+      careTimeline: [
+        {
+          time: "14:30",
+          name: "Observasi Tanda Vital & EWS",
+          status: "Overdue",
+          note: "Pengukuran tekanan darah & saturasi O2",
+          staff: "Ns. Dian"
+        },
+        {
+          time: "16:00",
+          name: "Visite DPJP Spesialis",
+          status: "Scheduled",
+          note: "Evaluasi hasil lab & USG abdomen",
+          staff: "Dr. Robert Chen, Sp.PD"
+        },
+        {
+          time: "18:00",
+          name: "Terapi Antibiotik IV & Infus",
+          status: "Scheduled",
+          note: "Ceftriaxone 1g via IV Line drip",
+          staff: "Tim Perawat Malam"
+        }
+      ],
+      careEvent: {
+        title: "Observasi Tanda Vital & EWS",
+        status: "Overdue",
+        name: "Vital signs",
+        time: "14:30",
+        note: "Nurse attendance not recorded"
+      },
+      badges: [
+        {
+          type: "fall_risk",
+          title: "Fall Risk (Tinggi)",
+          subtitle: "Pendampingan penuh mobilisasi • Bed rail naik",
+          standard: "AHA Yellow Band"
+        },
+        {
+          type: "npo",
+          title: "NPO (Puasa Medis)",
+          subtitle: "Dilarang makan & minum • Rencana USG 17:00",
+          standard: "Dietary Fasting"
+        },
+        {
+          type: "allergy",
+          title: "Alergi Obat",
+          subtitle: "Alergi berat: Penicillin & Cephalosporin",
+          standard: "AHA Red Band"
+        }
+      ]
+    }
+  ]
+};
+
 // Global App State
 const initialSavedData = JSON.parse(localStorage.getItem('hospital_door_sign_data'));
 const initialData = initialSavedData || JSON.parse(JSON.stringify(DEFAULT_ROOM_DATA));
@@ -207,12 +278,17 @@ let state = {
   nightMode: false,
   bezelColor: 'black',
   ledStatusIndex: 0,
-  roomMode: (initialData.beds && initialData.beds.length === 2) ? 2 : 3,
+  roomMode: (initialData.beds && initialData.beds.length === 1) ? 1 : ((initialData.beds && initialData.beds.length === 2) ? 2 : 3),
   twoBedLayout: 'side-by-side' // 'side-by-side' or 'stacked'
 };
 
 // Standardized Clinical Vector Icons
 const ICONS = {
+  crown: `
+    <svg class="w-7 h-7 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+    </svg>
+  `,
   bed: `
     <svg class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-[#0369a1] dark:text-[#38bdf8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 19h20M2 17v2M22 17v2" />
@@ -774,22 +850,289 @@ function renderTwoBedStacked(bed, index) {
   `;
 }
 
+// Render Single Bed for 1-Bed Executive VIP Layout (Dual-Panel Concierge)
+function renderVipRoom(bed, index) {
+  const event = bed.careEvent || {};
+  const theme = getCareEventTheme(event.status);
+  const visiting = getVisitingStrip(bed.visitingStatus);
+
+  const displayPhysician = state.privacyMode ? "Dr. [Terlindungi]" : (bed.physician || "Dr. Robert Chen, Sp.PD-KGEH");
+  const displayRMO = state.privacyMode ? "Dr. [Terlindungi]" : (bed.rmo || "Dr. Gigi Pratama");
+  const displayNurse = state.privacyMode ? "Ns. [Jaga]" : (bed.nurse || "Ns. Dian Anggraeni, S.Kep");
+
+  const timeline = bed.careTimeline || [
+    {
+      time: "14:30",
+      name: "Observasi Tanda Vital & EWS",
+      status: "Overdue",
+      note: "Pengukuran tekanan darah & saturasi O2",
+      staff: displayNurse
+    },
+    {
+      time: "16:00",
+      name: "Visite DPJP Spesialis",
+      status: "Scheduled",
+      note: "Evaluasi hasil lab & USG abdomen",
+      staff: displayPhysician
+    },
+    {
+      time: "18:00",
+      name: "Terapi Antibiotik IV & Infus",
+      status: "Scheduled",
+      note: "Ceftriaxone 1g via IV Line drip",
+      staff: "Tim Perawat Malam"
+    }
+  ];
+
+  const badgesHtml = (bed.badges || []).map(b => {
+    let bgClass = "bg-[#fffbeb] dark:bg-amber-950/70 border-2 border-[#fcd34d] dark:border-amber-800";
+    let titleClass = "text-[#78350f] dark:text-amber-200";
+    let subClass = "text-[#92400e] dark:text-amber-300";
+    let standardBadge = "bg-amber-200/80 dark:bg-amber-900 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700";
+    let icon = ICONS.fallRisk;
+
+    if (b.type === 'npo') {
+      bgClass = "bg-[#fff7ed] dark:bg-orange-950/70 border-2 border-[#fdba74] dark:border-orange-800";
+      titleClass = "text-[#7c2d12] dark:text-orange-200";
+      subClass = "text-[#9a3412] dark:text-orange-300";
+      standardBadge = "bg-orange-200/80 dark:bg-orange-900 text-orange-900 dark:text-orange-200 border-orange-300 dark:border-orange-700";
+      icon = ICONS.npo;
+    } else if (b.type === 'allergy') {
+      bgClass = "bg-[#fef2f2] dark:bg-red-950/70 border-2 border-[#fca5a5] dark:border-red-800";
+      titleClass = "text-[#7f1d1d] dark:text-red-200";
+      subClass = "text-[#991b1b] dark:text-red-300";
+      standardBadge = "bg-red-200/80 dark:bg-red-900 text-red-900 dark:text-red-200 border-red-300 dark:border-red-700";
+      icon = ICONS.allergy;
+    }
+
+    return `
+      <div class="flex items-center justify-between gap-3 px-3.5 py-2.5 sm:py-3 rounded-xl ${bgClass} shadow-2xs min-w-0">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="flex-shrink-0">${icon}</div>
+          <div class="leading-none min-w-0 truncate">
+            <h4 class="font-extrabold text-xs sm:text-sm tracking-tight ${titleClass} truncate leading-tight">${b.title}</h4>
+            <p class="text-[11px] sm:text-xs font-semibold ${subClass} mt-1 truncate leading-tight">${b.subtitle}</p>
+          </div>
+        </div>
+        <span class="flex-shrink-0 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${standardBadge}">
+          ${b.standard || 'AHA Standard'}
+        </span>
+      </div>
+    `;
+  }).join('');
+
+  const timelineHtml = timeline.map((item, idx) => {
+    const isOverdue = (item.status || '').toLowerCase() === 'overdue';
+    const isInProgress = (item.status || '').toLowerCase() === 'in progress';
+    
+    let borderStyle = 'border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/40';
+    let timeBadgeClass = 'bg-slate-700 text-white';
+    let statusBadgeClass = 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-700';
+
+    if (isOverdue) {
+      borderStyle = 'border-rose-300 dark:border-rose-900/60 bg-rose-50/80 dark:bg-rose-950/25 animate-overdue-pulse';
+      timeBadgeClass = 'bg-rose-600 text-white';
+      statusBadgeClass = 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-200 border-rose-300 dark:border-rose-800 animate-pulse';
+    } else if (isInProgress) {
+      borderStyle = 'border-sky-300 dark:border-sky-900/60 bg-sky-50/80 dark:bg-sky-950/25';
+      timeBadgeClass = 'bg-sky-600 text-white';
+      statusBadgeClass = 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-200 border-sky-300 dark:border-sky-800';
+    } else if (idx === 1) {
+      borderStyle = 'border-sky-200 dark:border-sky-800/50 bg-sky-50/40 dark:bg-sky-950/15';
+      timeBadgeClass = 'bg-sky-700 text-white';
+      statusBadgeClass = 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border-sky-300 dark:border-sky-800';
+    }
+
+    return `
+      <div class="flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl border ${borderStyle} shadow-2xs">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="flex-shrink-0 text-xs font-black font-mono px-2 py-0.5 rounded-md ${timeBadgeClass}">
+            ${item.time}
+          </span>
+          <div class="min-w-0 truncate">
+            <h4 class="font-extrabold text-xs sm:text-[13px] text-slate-900 dark:text-white truncate">${item.name}</h4>
+            <p class="text-[10.5px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">${item.note} • ${item.staff || ''}</p>
+          </div>
+        </div>
+        <span class="flex-shrink-0 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${statusBadgeClass}">
+          ${item.status}
+        </span>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <!-- LEFT PANEL: Executive Branding, Hospitality Visiting Concierge & Care Team (col-span-6) -->
+    <div onclick="editSpecificBed(${index})" class="col-span-6 flex flex-col justify-between gap-2.5 sm:gap-3 h-full overflow-hidden cursor-pointer group">
+      
+      <!-- HERO: Executive Suite Identity & Occupancy -->
+      <div class="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white rounded-2xl p-3 sm:p-3.5 border-2 border-sky-700/60 shadow-xs flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-sky-500/20 border-2 border-sky-400/50 flex flex-col items-center justify-center flex-shrink-0 shadow-inner">
+            ${ICONS.crown || ''}
+            <span class="font-black text-[11px] tracking-wider text-sky-200 mt-0.5">VIP</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-black uppercase tracking-widest bg-sky-500/30 text-sky-200 border border-sky-400/30 px-2 py-0.5 rounded-full">
+                EXECUTIVE SUITE
+              </span>
+              <span class="text-[10px] font-bold text-slate-300">FL. 7</span>
+            </div>
+            <h3 class="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight mt-0.5">
+              ${bed.label || 'SUITE 701'}
+            </h3>
+            <p class="text-[11px] text-sky-200/80 font-medium truncate">Kamar Perawatan VVIP Eksklusif</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+          <div class="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-black">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>OCCUPIED</span>
+          </div>
+          <span class="text-[10px] text-slate-300 font-semibold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+            <span>Perawat Siaga di Station</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- VISITING & PRIVACY CONCIERGE STRIP -->
+      ${visiting ? `
+        <div class="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl ${visiting.stripClass} border-2 shadow-2xs">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="flex-shrink-0 p-1 rounded-xl bg-white/60 dark:bg-slate-900/60">${visiting.icon}</div>
+            <div class="leading-tight min-w-0 truncate">
+              <div class="flex items-center gap-2">
+                <span class="font-black text-xs sm:text-sm ${visiting.titleClass} truncate">${visiting.title}</span>
+              </div>
+              <p class="text-[11px] sm:text-xs font-semibold ${visiting.subClass} mt-0.5 truncate">${visiting.subtitle}</p>
+            </div>
+          </div>
+          <span class="flex-shrink-0 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${visiting.badgeClass}">
+            Visiting Policy
+          </span>
+        </div>
+      ` : ''}
+
+      <!-- DEDICATED CARE TEAM CARD -->
+      <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+          <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+            <span>Tim Medis Dedikasi VIP</span>
+          </div>
+          <span class="text-[10px] font-bold text-sky-600 dark:text-sky-400">24/7 Primary Care</span>
+        </div>
+
+        <!-- DPJP Utama -->
+        <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-sky-50/60 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/50">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+              Dr
+            </div>
+            <div class="min-w-0 truncate">
+              <span class="text-[10px] font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider block">DPJP (Dokter Spesialis Utama)</span>
+              <span class="text-xs sm:text-[13px] font-black text-slate-900 dark:text-white truncate block">${displayPhysician}</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex-shrink-0">Sp.PD-KGEH</span>
+        </div>
+
+        <!-- Dokter Jaga Ruangan (RMO) -->
+        <div class="flex items-center justify-between gap-2 px-2 py-1">
+          <div class="min-w-0 truncate">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Dokter Ruangan (RMO)</span>
+            <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 truncate block">${displayRMO}</span>
+          </div>
+          <span class="text-[10px] font-medium text-slate-400 flex-shrink-0">Lantai 7</span>
+        </div>
+
+        <!-- Perawat Primer Penanggung Jawab -->
+        <div class="flex items-center justify-between gap-2 px-2 py-1 border-t border-slate-100 dark:border-slate-800/80">
+          <div class="min-w-0 truncate">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Perawat Primer (Primary Nurse)</span>
+            <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 truncate block">${displayNurse}</span>
+          </div>
+          <span class="text-[10px] font-bold text-sky-600 dark:text-sky-400 flex-shrink-0">Ext: 7011</span>
+        </div>
+
+        <!-- Bottom Concierge Station Bar -->
+        <div class="mt-1 pt-1.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            <span>Nurse Station: Ext. 101</span>
+          </span>
+          <span class="text-rose-600 dark:text-rose-400 font-bold">Tombol Darurat Bedside</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: Clinical Timeline & Patient Safety Precautions (col-span-6) -->
+    <div onclick="editSpecificBed(${index})" class="col-span-6 flex flex-col justify-between gap-2.5 sm:gap-3 h-full overflow-hidden cursor-pointer group">
+      
+      <!-- TODAY'S CLINICAL CARE TIMELINE -->
+      <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
+          <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Jadwal & Timeline Pelayanan Medis Hari Ini</span>
+          </div>
+          <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+            EWS Terkoneksi
+          </span>
+        </div>
+
+        <!-- 3 Sequential Care Items -->
+        <div class="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-between min-h-0">
+          ${timelineHtml}
+        </div>
+      </div>
+
+      <!-- PATIENT SAFETY PRECAUTIONS (JCI / KARS) -->
+      <div class="bg-white dark:bg-slate-900 border-2 border-[#cbd5e1] dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between flex-1 min-h-0 shadow-2xs gap-2">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
+          <div class="text-[10.5px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+            <span>Indikator Keselamatan Pasien (Patient Safety)</span>
+          </div>
+          <span class="text-[10px] font-black text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-300 dark:border-amber-800">
+            Standard JCI / KARS
+          </span>
+        </div>
+
+        <!-- Safety Badges Stack -->
+        <div class="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-between min-h-0">
+          ${badgesHtml}
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
 // Update Preset Buttons Active State
 function updatePresetButtons() {
   const numBeds = state.data.beds ? state.data.beds.length : 3;
   const btn3 = document.getElementById('btnPreset3Bed');
   const btn2 = document.getElementById('btnPreset2Bed');
+  const btn1 = document.getElementById('btnPreset1Bed');
   const btnSide = document.getElementById('btnLayoutSideBySide');
   const btnStack = document.getElementById('btnLayoutStacked');
 
-  if (btn3 && btn2) {
-    if (numBeds === 3) {
-      btn3.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs";
-      btn2.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
-    } else {
-      btn2.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs";
-      btn3.className = "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
-    }
+  if (btn3 && btn2 && btn1) {
+    btn3.className = (numBeds === 3)
+      ? "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs"
+      : "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
+    btn2.className = (numBeds === 2)
+      ? "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs"
+      : "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
+    btn1.className = (numBeds === 1)
+      ? "px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs"
+      : "px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white";
   }
 
   if (btnSide && btnStack) {
@@ -806,7 +1149,9 @@ function updatePresetButtons() {
 // Preset Switcher Function
 function setRoomPreset(numBeds) {
   state.roomMode = numBeds;
-  if (numBeds === 2) {
+  if (numBeds === 1) {
+    state.data = JSON.parse(JSON.stringify(VIP_ROOM_DATA));
+  } else if (numBeds === 2) {
     state.data = JSON.parse(JSON.stringify(TWO_BED_ROOM_DATA));
   } else {
     state.data = JSON.parse(JSON.stringify(DEFAULT_ROOM_DATA));
@@ -836,7 +1181,17 @@ function renderSignage() {
 
   updatePresetButtons();
 
-  if (numBeds === 2) {
+  if (numBeds === 1) {
+    if (twoBedControls) {
+      twoBedControls.classList.remove('flex');
+      twoBedControls.classList.add('hidden');
+    }
+    container.className = "flex-1 min-h-0 grid grid-cols-12 gap-3 sm:gap-4 overflow-hidden";
+    container.innerHTML = renderVipRoom(state.data.beds[0], 0);
+    if (caption) {
+      caption.innerHTML = "🔒 <strong>Layout Kamar 1 Bed (Executive VIP Concierge):</strong> Dual-Panel Display memadukan Hospitality VIP & Timeline Pelayanan Medis Komprehensif tanpa ruang kosong.";
+    }
+  } else if (numBeds === 2) {
     if (twoBedControls) {
       twoBedControls.classList.remove('hidden');
       twoBedControls.classList.add('flex');

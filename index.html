@@ -61,13 +61,16 @@
     <!-- Presentation Controls -->
     <div class="flex items-center gap-2 flex-wrap text-xs">
       
-      <!-- Room Capacity Selector (3 Bed vs 2 Bed) -->
+      <!-- Room Capacity Selector (3 Bed vs 2 Bed vs 1 Bed VIP) -->
       <div class="flex items-center bg-slate-800/95 border border-slate-700 p-0.5 rounded-xl shadow-xs">
         <button onclick="setRoomPreset(3)" id="btnPreset3Bed" class="px-2.5 py-1 font-bold text-xs rounded-lg transition bg-sky-600 text-white shadow-xs" title="Preset Kamar 3 Bed (Kelas II / Dahlia 308)">
           Kamar 3 Bed
         </button>
         <button onclick="setRoomPreset(2)" id="btnPreset2Bed" class="px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white" title="Preset Kamar 2 Bed (Kelas I / Dahlia 306)">
           Kamar 2 Bed
+        </button>
+        <button onclick="setRoomPreset(1)" id="btnPreset1Bed" class="px-2.5 py-1 font-bold text-xs rounded-lg transition text-slate-300 hover:text-white" title="Preset Kamar 1 Bed (VIP Suite / Anggrek 701)">
+          Kamar 1 Bed (VIP)
         </button>
       </div>
 

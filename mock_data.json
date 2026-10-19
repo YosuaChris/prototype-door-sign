@@ -133,5 +133,81 @@
         }
       ]
     }
-  ]
+  ],
+  "vipSuitePreset": {
+    "hospitalName": "St. Elisabeth Medical Center",
+    "roomNumber": "SUITE 701",
+    "wardName": "ANGGREK EXECUTIVE SUITE (VIP)",
+    "capacity": 1,
+    "visitingHours": "10:00 - 21:00 WIB (Fleksibel VIP)",
+    "bed": {
+      "id": "BED VIP",
+      "label": "SUITE 701",
+      "status": "OCCUPIED",
+      "patientCode": "RM-772910",
+      "visitingStatus": {
+        "status": "DND",
+        "title": "Do Not Disturb (Istirahat Penuh)",
+        "subtitle": "Pasien istirahat intensif • Kunjungan ditunda sementara",
+        "badgeColor": "purple"
+      },
+      "careTeam": {
+        "attendingPhysician": "Dr. Robert Chen, Sp.PD-KGEH",
+        "specialty": "Spesialis Penyakit Dalam",
+        "residentMedicalOfficer": "Dr. Gigi Pratama",
+        "nurseInCharge": "Ns. Dian Anggraeni, S.Kep",
+        "nurseExtension": "7011",
+        "nurseStation": "101"
+      },
+      "careTimeline": [
+        {
+          "time": "14:30",
+          "name": "Observasi Tanda Vital & EWS",
+          "status": "Overdue",
+          "note": "Pengukuran tekanan darah & saturasi O2",
+          "staff": "Ns. Dian"
+        },
+        {
+          "time": "16:00",
+          "name": "Visite DPJP Spesialis",
+          "status": "Scheduled",
+          "note": "Evaluasi hasil lab & USG abdomen",
+          "staff": "Dr. Robert Chen, Sp.PD"
+        },
+        {
+          "time": "18:00",
+          "name": "Terapi Antibiotik IV & Infus",
+          "status": "Scheduled",
+          "note": "Ceftriaxone 1g via IV Line drip",
+          "staff": "Tim Perawat Malam"
+        }
+      ],
+      "clinicalAlerts": [
+        {
+          "code": "FALL_RISK",
+          "title": "Fall Risk (Tinggi)",
+          "subtitle": "Pendampingan penuh mobilisasi • Bed rail naik",
+          "standard": "AHA Yellow Band",
+          "severity": "HIGH",
+          "color": "amber"
+        },
+        {
+          "code": "NPO",
+          "title": "NPO (Puasa Medis)",
+          "subtitle": "Dilarang makan & minum • Rencana USG 17:00",
+          "standard": "Dietary Fasting",
+          "severity": "CRITICAL",
+          "color": "orange"
+        },
+        {
+          "code": "ALLERGY",
+          "title": "Alergi Obat",
+          "subtitle": "Alergi berat: Penicillin & Cephalosporin",
+          "standard": "AHA Red Band",
+          "severity": "CRITICAL",
+          "color": "rose"
+        }
+      ]
+    }
+  }
 }
